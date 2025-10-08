@@ -1,0 +1,1 @@
+# This is my startup SaaS idea on a random evening in a long series of homesickness, the desire to be successful and being bored with my daily routine lmao. 
