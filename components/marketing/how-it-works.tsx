@@ -62,7 +62,7 @@ export function HowItWorks() {
                   <div className="w-3 h-3 rounded-full bg-green-400/50" />
                 </div>
               </div>
-              <div className="p-6 font-mono text-sm">
+              <div className="p-6 font-mono text-xs">
                 <div className="text-gray-500">{"<head>"}</div>
                 <div className="pl-4 text-gray-300 flex items-start gap-2">
                   <CheckCircle2 className="h-4 w-4 text-green-400 mt-1 flex-shrink-0" />
