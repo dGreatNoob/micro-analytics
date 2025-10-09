@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+// import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft } from "lucide-react"
 import { login } from "@/lib/auth"
 
@@ -58,7 +58,7 @@ export default function SignUpPage() {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
   return (
-    <div className="min-h-screen animated-gradient flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen w-full animated-gradient flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
@@ -151,11 +151,12 @@ export default function SignUpPage() {
 
             {/* Terms and conditions */}
             <div className="flex items-start gap-2">
-              <Checkbox 
+              <input 
                 id="terms" 
-                className="mt-1" 
+                type="checkbox"
+                className="mt-1 h-4 w-4 rounded border border-primary bg-background/50 focus:ring-2 focus:ring-blue-400/50" 
                 checked={formData.terms}
-                onCheckedChange={(checked: boolean) => handleInputChange("terms", checked === true)}
+                onChange={(e) => handleInputChange("terms", e.target.checked)}
                 required 
               />
               <label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed">

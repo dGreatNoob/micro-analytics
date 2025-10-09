@@ -146,7 +146,11 @@
     oklch(0.12 0.01 265)
   );
   background-size: 400% 400%;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   animation: gradient-shift 15s ease infinite;
+  width: 100vw;
+  min-height: 100vh;
 }
 
 /* Landing page glassmorphism effect */
