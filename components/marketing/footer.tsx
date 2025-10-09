@@ -3,20 +3,20 @@ import { BarChart3, Twitter, Github } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 glass relative">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+    <footer className="border-t border-white/10 glass relative" style={{ marginBottom: '-64px', paddingBottom: '64px' }}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="h-6 w-6 text-blue-400" />
-              <span className="text-xl font-semibold text-white">Microlytics</span>
+            <div className="flex items-center gap-2 mb-3">
+              <BarChart3 className="h-5 w-5 text-blue-400" />
+              <span className="text-lg font-semibold text-white">Microlytics</span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">Privacy-first analytics for the modern web.</p>
+            <p className="text-xs text-gray-400 leading-relaxed">Privacy-first analytics for the modern web.</p>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 text-white">Product</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold mb-2 text-white text-sm">Product</h3>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <Link href="#pricing" className="text-gray-400 hover:text-white transition-colors">
                   Pricing
@@ -36,8 +36,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 text-white">Company</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold mb-2 text-white text-sm">Company</h3>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <Link href="#about" className="text-gray-400 hover:text-white transition-colors">
                   About
@@ -52,8 +52,8 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-3 text-white">Legal</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold mb-2 text-white text-sm">Legal</h3>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <Link href="#privacy" className="text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
@@ -68,16 +68,16 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">Copyright © 2025 Microlytics.</p>
-          <div className="flex gap-6">
+        <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p className="text-xs text-gray-400">Copyright © 2025 Microlytics.</p>
+          <div className="flex gap-4">
             <Link href="#twitter" className="text-gray-400 hover:text-white transition-colors">
               <span className="sr-only">Twitter</span>
-              <Twitter className="h-5 w-5" />
+              <Twitter className="h-4 w-4" />
             </Link>
             <Link href="#github" className="text-gray-400 hover:text-white transition-colors">
               <span className="sr-only">GitHub</span>
-              <Github className="h-5 w-5" />
+              <Github className="h-4 w-4" />
             </Link>
           </div>
         </div>

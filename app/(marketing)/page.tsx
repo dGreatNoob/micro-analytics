@@ -43,10 +43,13 @@ export default function Home() {
             <Testimonials />
           </AnimatedSection>
           
-          <AnimatedSection id="section-6" className="relative">
+          <AnimatedSection id="section-6" className="relative" style={{ paddingTop: '0', paddingBottom: '0' }}>
             <div className="w-full h-full flex flex-col">
-              <div className="flex-1 flex items-center justify-center w-full">
-                <CTA />
+              <div className="flex-1 flex items-center justify-center w-full relative overflow-hidden" style={{ marginTop: '-64px', paddingTop: '64px' }}>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-violet-600/20 to-purple-600/20" />
+                <div className="relative w-full h-full">
+                  <CTA />
+                </div>
               </div>
               <Footer />
             </div>

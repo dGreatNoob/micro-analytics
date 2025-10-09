@@ -47,12 +47,12 @@ export function AnimatedSection({ children, id, className = "", delay = 0 }: Ani
     <motion.section
       ref={ref}
       id={id}
-      className={`w-full section-viewport flex items-center justify-center ${className}`}
+      className={`w-full section-viewport ${className}`}
       variants={containerVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
     >
-      <motion.div variants={itemVariants} className="w-full">
+      <motion.div variants={itemVariants} className="w-full h-full flex items-center justify-center">
         {children}
       </motion.div>
     </motion.section>
