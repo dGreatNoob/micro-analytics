@@ -18,7 +18,7 @@ const chartData = [
 
 export function Hero() {
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden">
+    <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden">
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
