@@ -158,7 +158,13 @@ section[id^="section-"] {
   justify-content: center;
   scroll-snap-align: center;
   scroll-snap-stop: always;
-  scroll-margin-top: 64px; /* Account for fixed header */
+  scroll-margin-top: 56px; /* Mobile header height */
+}
+
+@media (min-width: 640px) {
+  section[id^="section-"] {
+    scroll-margin-top: 64px; /* Desktop header height */
+  }
 }
 
 /* Adjust sections to account for fixed header */
@@ -171,7 +177,13 @@ section[id^="section-"] {
 
 /* Add top padding to first section to account for fixed header */
 section[id="section-0"] {
-  padding-top: 64px;
+  padding-top: 56px; /* Mobile header height */
+}
+
+@media (min-width: 640px) {
+  section[id="section-0"] {
+    padding-top: 64px; /* Desktop header height */
+  }
 }
 
 /* Ensure content is centered within sections */
