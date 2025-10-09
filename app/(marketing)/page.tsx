@@ -8,21 +8,55 @@ import { Testimonials } from "@/components/marketing/testimonials"
 import { CTA } from "@/components/marketing/cta"
 import { Footer } from "@/components/marketing/footer"
 import { ScrollToTop } from "@/components/marketing/scroll-to-top"
+import { SmoothScrollProvider } from "@/lib/smooth-scroll"
+import { AnimatedSection } from "@/components/marketing/animated-section"
+import { SectionNavigator } from "@/components/marketing/section-navigator"
 
 export default function Home() {
   return (
-    <main className="min-h-screen animated-gradient">
-      <Header />
-      <Hero />
-      <Features />
-      <HowItWorks />
-      <DemoPreview />
-      <Pricing />
-      <Testimonials />
-      <CTA />
-      <Footer />
-      <ScrollToTop />
-    </main>
+    <SmoothScrollProvider>
+      <main className="animated-gradient overflow-hidden">
+        <Header />
+        
+        <div className="relative">
+          <AnimatedSection id="section-0" className="relative">
+            <Hero />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-1" className="relative">
+            <Features />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-2" className="relative">
+            <HowItWorks />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-3" className="relative">
+            <DemoPreview />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-4" className="relative">
+            <Pricing />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-5" className="relative">
+            <Testimonials />
+          </AnimatedSection>
+          
+          <AnimatedSection id="section-6" className="relative">
+            <div className="w-full h-full flex flex-col">
+              <div className="flex-1 flex items-center justify-center w-full">
+                <CTA />
+              </div>
+              <Footer />
+            </div>
+          </AnimatedSection>
+        </div>
+        
+        <ScrollToTop />
+        <SectionNavigator />
+      </main>
+    </SmoothScrollProvider>
   )
 }
 

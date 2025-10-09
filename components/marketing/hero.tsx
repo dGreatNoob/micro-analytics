@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowRight, TrendingUp, Shield, Cookie, Zap } from "lucide-react"
@@ -18,7 +17,7 @@ const chartData = [
 
 export function Hero() {
   return (
-    <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-20 overflow-hidden">
+    <section className="relative py-20 lg:py-32 overflow-hidden">
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
@@ -41,24 +40,20 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/signup">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-500 to-violet-600 text-white hover:from-blue-600 hover:to-violet-700 text-base glow-hover w-full sm:w-auto"
-                >
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/dashboard">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-base bg-transparent border-white/20 text-white hover:bg-white/10 w-full sm:w-auto"
-                >
-                  Live Demo
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-blue-500 to-violet-600 text-white hover:from-blue-600 hover:to-violet-700 text-base glow-hover"
+              >
+                Start Free Trial
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-base bg-transparent border-white/20 text-white hover:bg-white/10"
+              >
+                Live Demo
+              </Button>
             </div>
 
             {/* Trust badges */}
@@ -106,7 +101,7 @@ export function Hero() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={(value: number) => `${value}`}
+                      tickFormatter={(value) => `${value}`}
                     />
                     <Tooltip
                       contentStyle={{

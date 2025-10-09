@@ -23,7 +23,7 @@ export function DemoPreview() {
   const [, setHoveredCard] = useState<number | null>(null)
 
   return (
-    <section id="demo" className="py-16 lg:py-24 relative">
+    <div className="w-full h-full relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="outline" className="mb-4 border-blue-400/50 text-blue-400">
@@ -152,6 +152,6 @@ export function DemoPreview() {
           </Card>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

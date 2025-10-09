@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export function CTA() {
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-violet-600/20 to-purple-600/20" />
 
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,6 +80,6 @@ export function CTA() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

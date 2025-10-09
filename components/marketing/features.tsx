@@ -47,7 +47,7 @@ export function Features() {
   }, [])
 
   return (
-    <section id="features" ref={sectionRef} className="py-16 lg:py-24 relative">
+    <div ref={sectionRef} className="w-full h-full relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-balance text-white">
@@ -79,6 +79,6 @@ export function Features() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   )
 }
