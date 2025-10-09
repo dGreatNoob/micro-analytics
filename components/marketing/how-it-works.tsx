@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
+import { useState, useEffect } from "react"
 
 const steps = [
   {
@@ -22,6 +23,94 @@ const steps = [
 ]
 
 export function HowItWorks() {
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null)
+  const [isTyping, setIsTyping] = useState(false)
+  
+  // Full script text for typewriter effect
+  const fullScriptText = `<script async defer src="https://microlytics.app/m.js"\ndata-site="YOUR_SITE_ID"></script>`
+  const [typedText, setTypedText] = useState("")
+  const [showCursor, setShowCursor] = useState(false)
+  
+  // Calculate typing speed: 60 WPM = 300 characters per minute = 5 chars per second = 200ms per character
+  const typingSpeed = 100 // milliseconds per character
+  
+  // Typing animation effect
+  useEffect(() => {
+    if (hoveredStep === 1) { // Step 2 (index 1)
+      setIsTyping(true)
+      setTypedText("")
+      setShowCursor(true)
+      
+      let currentIndex = 0
+      const typeInterval = setInterval(() => {
+        if (currentIndex < fullScriptText.length) {
+          setTypedText(fullScriptText.slice(0, currentIndex + 1))
+          currentIndex++
+        } else {
+          clearInterval(typeInterval)
+          setIsTyping(false)
+        }
+      }, typingSpeed)
+      
+      return () => clearInterval(typeInterval)
+    } else {
+      setTypedText("")
+      setIsTyping(false)
+      setShowCursor(false)
+    }
+  }, [hoveredStep, fullScriptText, typingSpeed])
+
+  // Helper function to render syntax-highlighted text
+  const renderHighlightedText = (text: string) => {
+    const parts = []
+    let currentIndex = 0
+    
+    // Split by different syntax elements
+    const regex = /(<script|async|defer|src=|data-site=|"[^"]*"|>\s*<\/script>)/g
+    let match
+    
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before match
+      if (match.index > currentIndex) {
+        const beforeText = text.slice(currentIndex, match.index)
+        if (beforeText) {
+          parts.push({ text: beforeText, color: 'text-gray-300' })
+        }
+      }
+      
+      // Add the matched part with appropriate color
+      const matchText = match[0]
+      let color = 'text-gray-300' // default
+      
+      if (matchText === '<script' || matchText.includes('</script>')) {
+        color = 'text-blue-400'
+      } else if (matchText === 'async' || matchText === 'defer') {
+        color = 'text-violet-400'
+      } else if (matchText === 'src=' || matchText === 'data-site=') {
+        color = 'text-blue-400'
+      } else if (matchText.startsWith('"') && matchText.endsWith('"')) {
+        color = 'text-green-400'
+      }
+      
+      parts.push({ text: matchText, color })
+      currentIndex = match.index + matchText.length
+    }
+    
+    // Add remaining text
+    if (currentIndex < text.length) {
+      const remainingText = text.slice(currentIndex)
+      if (remainingText) {
+        parts.push({ text: remainingText, color: 'text-gray-300' })
+      }
+    }
+    
+    return parts.map((part, index) => (
+      <span key={index} className={part.color}>
+        {part.text}
+      </span>
+    ))
+  }
+
   return (
     <div className="w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -39,7 +128,13 @@ export function HowItWorks() {
           {/* Right side - Step cards */}
           <div className="space-y-5">
             {/* Step 1 */}
-            <Card className="glass border-white/20 hover:border-white/30 transition-all">
+            <Card 
+              className={`glass border-white/20 hover:border-white/30 transition-all duration-300 cursor-pointer ${
+                hoveredStep === 0 ? 'transform scale-105 shadow-2xl shadow-blue-500/20' : ''
+              }`}
+              onMouseEnter={() => setHoveredStep(0)}
+              onMouseLeave={() => setHoveredStep(null)}
+            >
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg glow">
@@ -54,7 +149,13 @@ export function HowItWorks() {
             </Card>
 
             {/* Step 2 with integrated script */}
-            <Card className="glass border-white/20 hover:border-white/30 transition-all">
+            <Card 
+              className={`glass border-white/20 hover:border-white/30 transition-all duration-150 cursor-pointer ${
+                hoveredStep === 1 ? 'transform scale-105 shadow-2xl shadow-blue-500/20' : ''
+              }`}
+              onMouseEnter={() => setHoveredStep(1)}
+              onMouseLeave={() => setHoveredStep(null)}
+            >
               <CardContent className="p-6">
                 <div className="flex items-start gap-4 mb-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg glow">
@@ -66,8 +167,10 @@ export function HowItWorks() {
                   </div>
                 </div>
                 
-                {/* Code snippet */}
-                <div className="bg-black/20 rounded-lg border border-white/10 overflow-hidden">
+                {/* Code snippet with typing animation */}
+                <div className={`bg-black/20 rounded-lg border border-white/10 overflow-hidden transition-all duration-300 ${
+                  hoveredStep === 1 ? 'transform scale-105 shadow-lg shadow-blue-500/20' : ''
+                }`}>
                   <div className="bg-gradient-to-r from-blue-500/10 to-violet-500/10 px-3 py-2 border-b border-white/10 flex items-center justify-between">
                     <span className="text-xs font-mono text-gray-300">index.html</span>
                     <div className="flex gap-1.5">
@@ -80,15 +183,27 @@ export function HowItWorks() {
                     <div className="text-gray-500">{"<head>"}</div>
                     <div className="pl-3 text-gray-300 flex items-start gap-2">
                       <CheckCircle2 className="h-3.5 w-3.5 text-green-400 mt-0.5 flex-shrink-0" />
-                      <span className="text-blue-400">{"<script "}</span>
-                      <span className="text-violet-400">async defer</span>
-                      <span className="text-blue-400">{" src="}</span>
-                      <span className="text-green-400">&ldquo;https://microlytics.app/m.js&rdquo;</span>
-                    </div>
-                    <div className="pl-10 text-gray-300">
-                      <span className="text-blue-400">data-site=</span>
-                      <span className="text-green-400">&ldquo;YOUR_SITE_ID&rdquo;</span>
-                      <span className="text-blue-400">{"></script>"}</span>
+                      <div className="flex-1 whitespace-pre-wrap">
+                        {hoveredStep === 1 ? (
+                          <div>
+                            {renderHighlightedText(typedText)}
+                            {showCursor && (
+                              <span className="text-blue-400 blink-cursor">|</span>
+                            )}
+                          </div>
+                        ) : (
+                          <>
+                            <span className="text-blue-400">{"<script "}</span>
+                            <span className="text-violet-400">async defer</span>
+                            <span className="text-blue-400">{" src="}</span>
+                            <span className="text-green-400">&ldquo;https://microlytics.app/m.js&rdquo;</span>
+                            <br />
+                            <span className="text-blue-400">data-site=</span>
+                            <span className="text-green-400">&ldquo;YOUR_SITE_ID&rdquo;</span>
+                            <span className="text-blue-400">{"></script>"}</span>
+                          </>
+                        )}
+                      </div>
                     </div>
                     <div className="text-gray-500">{"</head>"}</div>
                   </div>
@@ -97,7 +212,13 @@ export function HowItWorks() {
             </Card>
 
             {/* Step 3 */}
-            <Card className="glass border-white/20 hover:border-white/30 transition-all">
+            <Card 
+              className={`glass border-white/20 hover:border-white/30 transition-all duration-300 cursor-pointer ${
+                hoveredStep === 2 ? 'transform scale-105 shadow-2xl shadow-blue-500/20' : ''
+              }`}
+              onMouseEnter={() => setHoveredStep(2)}
+              onMouseLeave={() => setHoveredStep(null)}
+            >
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg glow">

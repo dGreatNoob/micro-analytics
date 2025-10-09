@@ -2,16 +2,17 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { ReactNode } from 'react'
+import { ReactNode, CSSProperties } from 'react'
 
 interface AnimatedSectionProps {
   children: ReactNode
   id: string
   className?: string
   delay?: number
+  style?: CSSProperties
 }
 
-export function AnimatedSection({ children, id, className = "", delay = 0 }: AnimatedSectionProps) {
+export function AnimatedSection({ children, id, className = "", delay = 0, style }: AnimatedSectionProps) {
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: false
@@ -25,7 +26,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0 }: Ani
       transition: {
         duration: 0.8,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: "easeOut" as const,
         staggerChildren: 0.1
       }
     }
@@ -38,7 +39,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0 }: Ani
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        ease: "easeOut" as const
       }
     }
   }
@@ -48,6 +49,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0 }: Ani
       ref={ref}
       id={id}
       className={`w-full section-viewport ${className}`}
+      style={style}
       variants={containerVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
