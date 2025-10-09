@@ -36,7 +36,7 @@ export function HowItWorks() {
 
         <div className="max-w-4xl mx-auto space-y-8">
           {steps.map((step, index) => (
-            <div key={index} className="flex gap-6 items-start">
+            <div key={index} className="flex gap-6 items-center">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white font-bold text-xl glow">
                 {step.number}
               </div>
