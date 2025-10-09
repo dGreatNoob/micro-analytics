@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ArrowRight, TrendingUp, Shield, Cookie, Zap } from "lucide-react"
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
+import { useState } from "react"
 
 const chartData = [
   { date: "Mon", visitors: 420 },
@@ -14,6 +15,49 @@ const chartData = [
   { date: "Sat", visitors: 1100 },
   { date: "Sun", visitors: 950 },
 ]
+
+// Tooltip component
+function TooltipBadge({ 
+  children, 
+  tooltip, 
+  delay = 300 
+}: { 
+  children: React.ReactNode
+  tooltip: string
+  delay?: number 
+}) {
+  const [showTooltip, setShowTooltip] = useState(false)
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null)
+
+  const handleMouseEnter = () => {
+    const id = setTimeout(() => setShowTooltip(true), delay)
+    setTimeoutId(id)
+  }
+
+  const handleMouseLeave = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      setTimeoutId(null)
+    }
+    setShowTooltip(false)
+  }
+
+  return (
+    <div 
+      className="relative cursor-pointer" 
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {children}
+      {showTooltip && (
+        <div className="absolute top-full left-0 mt-2 px-3 py-2 bg-black/90 text-white text-xs rounded-lg z-50 border border-white/20 backdrop-blur-sm max-w-xs whitespace-normal shadow-lg">
+          <div className="text-left leading-relaxed">{tooltip}</div>
+          <div className="absolute bottom-full left-4 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-black/90" />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function Hero() {
   return (
@@ -57,19 +101,25 @@ export function Hero() {
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap items-center gap-4 pt-4">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass">
-                <Shield className="h-5 w-5 text-green-400" />
-                <span className="text-sm font-medium text-white">GDPR Compliant</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass">
-                <Cookie className="h-5 w-5 text-blue-400" />
-                <span className="text-sm font-medium text-white">No Cookies</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass">
-                <Zap className="h-5 w-5 text-yellow-400" />
-                <span className="text-sm font-medium text-white">Open API</span>
-              </div>
+            <div className="flex flex-wrap items-start gap-4 pt-4 pb-8">
+              <TooltipBadge tooltip="Fully compliant with GDPR regulations. We don't collect personal data and respect user privacy.">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass hover:bg-white/5 transition-colors">
+                  <Shield className="h-5 w-5 text-green-400" />
+                  <span className="text-sm font-medium text-white">GDPR Compliant</span>
+                </div>
+              </TooltipBadge>
+              <TooltipBadge tooltip="No tracking cookies or local storage. Your visitors' privacy is completely protected.">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass hover:bg-white/5 transition-colors">
+                  <Cookie className="h-5 w-5 text-blue-400" />
+                  <span className="text-sm font-medium text-white">No Cookies</span>
+                </div>
+              </TooltipBadge>
+              <TooltipBadge tooltip="Access your data through our REST API. Export, integrate, and build custom solutions.">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass hover:bg-white/5 transition-colors">
+                  <Zap className="h-5 w-5 text-yellow-400" />
+                  <span className="text-sm font-medium text-white">Open API</span>
+                </div>
+              </TooltipBadge>
             </div>
           </div>
 
