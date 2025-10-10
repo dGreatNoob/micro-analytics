@@ -47,36 +47,38 @@ export function Features() {
   }, [])
 
   return (
-    <div ref={sectionRef} className="w-full h-full relative">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-balance text-white">
-            Everything you need, nothing you don&apos;t
-          </h2>
-          <p className="text-lg text-gray-300 text-pretty leading-relaxed">
-            Microlytics gives you the essential analytics you need without the complexity, tracking, or privacy concerns
-            of traditional tools.
-          </p>
-        </div>
+    <div ref={sectionRef} className="w-full h-full relative flex items-center justify-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <div className="flex flex-col gap-4">
+          <div className="text-center max-w-3xl mx-auto pb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-balance text-white">
+              Everything you need, nothing you don&apos;t
+            </h2>
+            <p className="text-lg text-gray-300 text-pretty leading-relaxed">
+              Microlytics gives you the essential analytics you need without the complexity, tracking, or privacy concerns
+              of traditional tools.
+            </p>
+          </div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {features.map((feature, index) => (
-            <Card
-              key={index}
-              className={`glass border-white/20 hover:border-blue-400/50 transition-all duration-500 glow-hover ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
-            >
-              <CardContent className="p-6">
-                <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center mb-4 border border-white/10">
-                  <feature.icon className="h-6 w-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
-                <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 pb-6">
+            {features.map((feature, index) => (
+              <Card
+                key={index}
+                className={`glass border-white/20 hover:border-blue-400/50 transition-all duration-500 glow-hover ${
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+              >
+                <CardContent className="p-6">
+                  <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center mb-4 border border-white/10">
+                    <feature.icon className="h-6 w-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2 text-white">{feature.title}</h3>
+                  <p className="text-gray-300 leading-relaxed">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>

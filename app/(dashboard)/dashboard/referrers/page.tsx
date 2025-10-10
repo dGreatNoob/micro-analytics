@@ -19,10 +19,10 @@ const referrersData = [
 export default function ReferrersPage() {
   return (
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        {/* Page Title and Actions */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold text-foreground">Referrers</h1>
+            <h1 className="text-2xl font-semibold text-foreground">Referrers</h1>
             <p className="text-sm text-muted-foreground mt-1">Traffic sources and referral analytics</p>
           </div>
           <div className="flex items-center gap-3">

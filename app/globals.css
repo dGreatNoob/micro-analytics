@@ -124,6 +124,16 @@
   html {
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  * {
+    scroll-behavior: smooth;
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 
   html, body {
@@ -144,46 +154,52 @@ main {
 /* Enable scroll snapping for the main container */
 .animated-gradient {
   scroll-snap-type: y mandatory;
+  height: 100vh;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.animated-gradient::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Full-screen section containers */
 section[id^="section-"] {
   width: 100vw;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
   scroll-snap-stop: always;
-  scroll-margin-top: 56px; /* Mobile header height */
 }
 
-@media (min-width: 640px) {
-  section[id^="section-"] {
-    scroll-margin-top: 64px; /* Desktop header height */
-  }
-}
-
-/* Adjust sections to account for fixed header */
-.section-viewport {
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding-top: 0; /* Remove extra padding for last section */
-  padding-bottom: 0;
-}
-
-/* Add top padding to first section to account for fixed header */
+/* First section accounts for header height */
 section[id="section-0"] {
   padding-top: 56px; /* Mobile header height */
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
 }
 
 @media (min-width: 640px) {
   section[id="section-0"] {
     padding-top: 64px; /* Desktop header height */
+    height: calc(100vh - 64px);
+    height: calc(100dvh - 64px);
   }
+}
+
+/* Adjust sections to account for fixed header */
+.section-viewport {
+  height: 100%;
+  width: 100%;
+  padding: 0;
 }
 
 /* Ensure content is centered within sections */
@@ -283,6 +299,33 @@ header {
 
 .hover-scale:hover {
   transform: scale(1.05);
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Optimize rendering performance */
+.glass, .glass-card {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth button interactions */
+button, a {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Smooth card hover transitions */
+.glass, .glass-card {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass:hover, .glass-card:hover {
+  transform: translateY(-2px);
 }
 
 /* Optimize animations for better performance */

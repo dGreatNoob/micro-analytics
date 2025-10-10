@@ -3,8 +3,9 @@ import { BarChart3, Twitter, Github } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 glass relative" style={{ marginBottom: '-64px', paddingBottom: '64px' }}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <footer className="w-full border-t border-white/10 glass relative">
+      <div className="w-full">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
@@ -80,6 +81,7 @@ export function Footer() {
               <Github className="h-4 w-4" />
             </Link>
           </div>
+        </div>
         </div>
       </div>
     </footer>

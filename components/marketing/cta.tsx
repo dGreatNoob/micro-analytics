@@ -1,29 +1,70 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
 
 export function CTA() {
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false
+  })
+
   return (
-    <div className="relative w-full h-full flex items-center justify-center py-6">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+    <div className="relative w-full h-full flex items-center justify-center py-2" ref={ref}>
+      <div className="w-full">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          className="max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
           <div className="glass-card p-6 sm:p-8 text-center space-y-5">
-            <div className="flex justify-center">
+            <motion.div 
+              className="flex justify-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.15, 
+                ease: [0.34, 1.56, 0.64, 1],
+                type: "spring",
+                stiffness: 120
+              }}
+            >
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 glow-blue">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-            </div>
+            </motion.div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-balance">
+            <motion.h2 
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-balance"
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               Ready to respect your visitors' privacy?
-            </h2>
+            </motion.h2>
 
-            <p className="text-base sm:text-lg text-gray-300 text-pretty leading-relaxed max-w-2xl mx-auto">
+            <motion.p 
+              className="text-base sm:text-lg text-gray-300 text-pretty leading-relaxed max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               Join thousands of indie developers and small businesses using Microlytics. Start your free trial today—no
               credit card required.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-3 justify-center pt-2"
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              transition={{ duration: 0.7, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <Link href="/signup">
                 <Button
                   size="lg"
@@ -41,9 +82,14 @@ export function CTA() {
               >
                 View Documentation
               </Button>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-3 text-xs sm:text-sm text-gray-400">
+            <motion.div 
+              className="flex flex-wrap items-center justify-center gap-4 pt-3 text-xs sm:text-sm text-gray-400"
+              initial={{ opacity: 0, y: 10 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <div className="flex items-center gap-1.5">
                 <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path
@@ -74,8 +120,9 @@ export function CTA() {
                 </svg>
                 <span>Cancel anytime</span>
               </div>
-            </div>
+            </motion.div>
           </div>
+        </motion.div>
         </div>
       </div>
     </div>

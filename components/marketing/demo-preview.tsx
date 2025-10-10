@@ -25,7 +25,7 @@ export function DemoPreview() {
 
   return (
     <div className="w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
           {/* Left side - Heading */}
           <div className="space-y-4 lg:space-y-6 lg:sticky lg:top-24">

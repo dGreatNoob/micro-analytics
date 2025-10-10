@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { ArrowRight, TrendingUp, Shield, Cookie, Zap } from "lucide-react"
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 import { useState } from "react"
+import { motion } from "framer-motion"
 
 const chartData = [
   { date: "Mon", site1: 420, site2: 320, site3: 280 },
@@ -67,9 +68,9 @@ function TooltipBadge({
 
 export function Hero() {
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden">
+    <section className="relative w-full h-full overflow-hidden">
       {/* Animated background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
         <div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl animate-pulse"
@@ -77,19 +78,40 @@ export function Hero() {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="space-y-8">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance text-white">
+      <div className="w-full h-full flex items-center justify-center relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <motion.div 
+            className="space-y-8"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <motion.h1 
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance text-white"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               See your traffic clearly — without invading privacy.
-            </h1>
+            </motion.h1>
 
-            <p className="text-xl text-gray-300 text-pretty leading-relaxed">
+            <motion.p 
+              className="text-xl text-gray-300 text-pretty leading-relaxed"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               Microlytics gives you beautiful, simple, privacy-first analytics for your websites — no cookies, no
               tracking bloat.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-500 to-violet-600 text-white hover:from-blue-600 hover:to-violet-700 text-base glow-hover"
@@ -104,10 +126,15 @@ export function Hero() {
               >
                 Live Demo
               </Button>
-            </div>
+            </motion.div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap items-start gap-4 pt-4 pb-8">
+            <motion.div 
+              className="flex flex-wrap items-start gap-4 pt-4 pb-8"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <TooltipBadge tooltip="Fully compliant with GDPR regulations. We don't collect personal data and respect user privacy.">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg glass hover:bg-white/5 transition-colors">
                   <Shield className="h-5 w-5 text-green-400" />
@@ -126,10 +153,15 @@ export function Hero() {
                   <span className="text-sm font-medium text-white">Open API</span>
                 </div>
               </TooltipBadge>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="relative">
+          <motion.div 
+            className="relative"
+            initial={{ opacity: 0, x: 20, scale: 0.97 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <Card className="p-6 glass glow border-white/20 transform hover:rotate-1 transition-transform duration-300">
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -213,9 +245,29 @@ export function Hero() {
             </Card>
 
             {/* Glow effects */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-violet-500/30 rounded-full blur-3xl -z-10" />
-            <div className="absolute -top-6 -left-6 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl -z-10" />
-          </div>
+            <motion.div 
+              className="absolute -bottom-6 -right-6 w-32 h-32 bg-violet-500/30 rounded-full blur-3xl -z-10"
+              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: [0.45, 0.05, 0.55, 0.95],
+                repeatType: "reverse"
+              }}
+            />
+            <motion.div 
+              className="absolute -top-6 -left-6 w-32 h-32 bg-blue-500/30 rounded-full blur-3xl -z-10"
+              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+              transition={{ 
+                duration: 6, 
+                delay: 3, 
+                repeat: Infinity, 
+                ease: [0.45, 0.05, 0.55, 0.95],
+                repeatType: "reverse"
+              }}
+            />
+          </motion.div>
+        </div>
         </div>
       </div>
     </section>
