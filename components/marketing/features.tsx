@@ -2,7 +2,8 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Shield, Zap, Code } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
 
 const features = [
   {
@@ -26,31 +27,26 @@ const features = [
 ]
 
 export function Features() {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 },
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false
+  })
 
   return (
-    <div ref={sectionRef} className="w-full h-full relative flex items-center justify-center">
+    <div className="w-full h-full relative flex items-center justify-center" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="flex flex-col gap-4">
-          <div className="text-center max-w-3xl mx-auto pb-6">
+        <motion.div 
+          className="flex flex-col gap-4"
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <motion.div 
+            className="text-center max-w-3xl mx-auto pb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-balance text-white">
               Everything you need, nothing you don&apos;t
             </h2>
@@ -58,17 +54,21 @@ export function Features() {
               Microlytics gives you the essential analytics you need without the complexity, tracking, or privacy concerns
               of traditional tools.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8 pb-6">
             {features.map((feature, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className={`glass border-white/20 hover:border-blue-400/50 transition-all duration-500 glow-hover ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: 0.2 + index * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
               >
+                <Card className="glass border-white/20 hover:border-blue-400/50 transition-all duration-500 glow-hover h-full">
                 <CardContent className="p-6">
                   <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 flex items-center justify-center mb-4 border border-white/10">
                     <feature.icon className="h-6 w-6 text-blue-400" />
@@ -77,9 +77,10 @@ export function Features() {
                   <p className="text-gray-300 leading-relaxed">{feature.description}</p>
                 </CardContent>
               </Card>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )

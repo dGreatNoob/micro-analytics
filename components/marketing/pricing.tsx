@@ -1,6 +1,10 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check } from "lucide-react"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
 
 const plans = [
   {
@@ -56,27 +60,51 @@ const plans = [
 ]
 
 export function Pricing() {
+  const { ref, inView } = useInView({
+    threshold: 0.3,
+    triggerOnce: false
+  })
+
   return (
-    <div className="w-full h-full relative flex items-center justify-center">
+    <div className="w-full h-full relative flex items-center justify-center" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <div className="flex flex-col gap-4">
-          <div className="text-center max-w-3xl mx-auto pb-6">
+        <motion.div 
+          className="flex flex-col gap-4"
+          initial={{ opacity: 0, y: 20, scale: 0.98 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <motion.div 
+            className="text-center max-w-3xl mx-auto pb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 text-balance text-white">
               Simple, transparent pricing
             </h2>
             <p className="text-base text-gray-300 text-pretty">
               Start free, upgrade when you need to. No hidden fees, no surprises.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto pb-6 w-full">
             {plans.map((plan, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className={`relative flex flex-col glass border-white/20 ${
-                  plan.popular ? "glow scale-105" : ""
-                } transition-all duration-300 hover:scale-105`}
+                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 20, scale: 0.98 }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: 0.2 + index * 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
               >
+                <Card
+                  className={`relative flex flex-col glass border-white/20 h-full ${
+                    plan.popular ? "glow scale-105" : ""
+                  } transition-all duration-300 hover:scale-105`}
+                >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span className="bg-gradient-to-r from-blue-500 to-violet-600 text-white px-3 py-0.5 rounded-full text-xs font-semibold glow">
@@ -117,18 +145,24 @@ export function Pricing() {
                   </Button>
                 </CardFooter>
               </Card>
+              </motion.div>
             ))}
           </div>
 
-          <div className="text-center">
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <p className="text-sm text-gray-300">
               Need more than 500k pageviews?{" "}
               <a href="#contact" className="text-blue-400 hover:underline font-medium">
                 Contact us for enterprise pricing
               </a>
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   )

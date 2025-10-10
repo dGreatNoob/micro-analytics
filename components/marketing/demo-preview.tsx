@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Users, Eye, MousePointer, TrendingUp, Zap, Award, Globe, Github } from "lucide-react"
 import { FaXTwitter, FaGoogle, FaGithub } from "react-icons/fa6"
 import { useState } from "react"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
 
 const topPages = [
   { path: "/blog/privacy-matters", views: 1243, visitors: 892 },
@@ -22,22 +24,47 @@ const referrers = [
 
 export function DemoPreview() {
   const [, setHoveredCard] = useState<number | null>(null)
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: false
+  })
 
   return (
-    <div className="w-full">
+    <div className="w-full" ref={ref}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-stretch">
           {/* Left side - Heading */}
-          <div className="space-y-4 lg:space-y-6 lg:sticky lg:top-24">
-            <Badge variant="outline" className="border-blue-400/50 text-blue-400 px-2 py-1 text-xs">
-              Live Demo
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight">
+          <motion.div 
+            className="space-y-4 lg:space-y-6 lg:sticky lg:top-24"
+            initial={{ opacity: 0, x: -20 }}
+            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <Badge variant="outline" className="border-blue-400/50 text-blue-400 px-2 py-1 text-xs">
+                Live Demo
+              </Badge>
+            </motion.div>
+            <motion.h2 
+              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight"
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               Understand your visitors in seconds
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
+            </motion.h2>
+            <motion.p 
+              className="text-lg sm:text-xl text-gray-300 leading-relaxed"
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               A clean, intuitive dashboard that shows you exactly what you need to know about your website traffic.
-            </p>
+            </motion.p>
 
             {/* Exciting Visual Stats */}
             <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-4 lg:pt-6">
@@ -141,7 +168,7 @@ export function DemoPreview() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right side - Demo content */}
           <div className="w-full flex items-start">

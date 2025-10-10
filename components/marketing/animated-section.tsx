@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { ReactNode, CSSProperties, useRef } from 'react'
 
@@ -19,14 +19,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
     triggerOnce: false
   })
   
-  // Parallax scroll effect with smooth transitions
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  })
-  
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.3])
+  // No parallax - keep it static
 
   const containerVariants = {
     hidden: { 
@@ -87,7 +80,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
       ref={setRefs}
       id={id}
       className={`w-full section-viewport ${className}`}
-      style={{ ...style, opacity }}
+      style={style}
       variants={containerVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
@@ -96,7 +89,6 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
       <motion.div 
         variants={itemVariants} 
         className="w-full h-full flex items-center justify-center px-4"
-        style={{ y }}
       >
         {children}
       </motion.div>
