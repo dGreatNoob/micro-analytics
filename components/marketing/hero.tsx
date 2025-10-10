@@ -7,13 +7,19 @@ import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "rec
 import { useState } from "react"
 
 const chartData = [
-  { date: "Mon", visitors: 420 },
-  { date: "Tue", visitors: 580 },
-  { date: "Wed", visitors: 720 },
-  { date: "Thu", visitors: 650 },
-  { date: "Fri", visitors: 890 },
-  { date: "Sat", visitors: 1100 },
-  { date: "Sun", visitors: 950 },
+  { date: "Mon", site1: 420, site2: 320, site3: 280 },
+  { date: "Tue", site1: 580, site2: 450, site3: 380 },
+  { date: "Wed", site1: 720, site2: 590, site3: 490 },
+  { date: "Thu", site1: 650, site2: 540, site3: 450 },
+  { date: "Fri", site1: 890, site2: 720, site3: 620 },
+  { date: "Sat", site1: 1100, site2: 890, site3: 750 },
+  { date: "Sun", site1: 950, site2: 780, site3: 680 },
+]
+
+const siteConfig = [
+  { key: "site1", name: "mywebsite.com", color: "#3b82f6", gradientId: "colorSite1" },
+  { key: "site2", name: "myblog.com", color: "#8b5cf6", gradientId: "colorSite2" },
+  { key: "site3", name: "myshop.com", color: "#ec4899", gradientId: "colorSite3" },
 ]
 
 // Tooltip component
@@ -140,10 +146,12 @@ export function Hero() {
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={chartData}>
                     <defs>
-                      <linearGradient id="colorVisitors" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1} />
-                      </linearGradient>
+                      {siteConfig.map((site) => (
+                        <linearGradient key={site.gradientId} id={site.gradientId} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor={site.color} stopOpacity={0.4} />
+                          <stop offset="95%" stopColor={site.color} stopOpacity={0.05} />
+                        </linearGradient>
+                      ))}
                     </defs>
                     <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} />
                     <YAxis
@@ -155,30 +163,51 @@ export function Hero() {
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "rgba(30, 30, 40, 0.9)",
+                        backgroundColor: "rgba(30, 30, 40, 0.95)",
                         border: "1px solid rgba(255, 255, 255, 0.1)",
                         borderRadius: "8px",
                         backdropFilter: "blur(12px)",
                       }}
-                      labelStyle={{ color: "#fff" }}
-                      itemStyle={{ color: "#3b82f6" }}
+                      labelStyle={{ color: "#fff", fontWeight: "600" }}
+                      formatter={(value: number, name: string) => {
+                        const site = siteConfig.find(s => s.key === name)
+                        return [value, site?.name || name]
+                      }}
                     />
-                    <Area
-                      type="monotone"
-                      dataKey="visitors"
-                      stroke="#3b82f6"
-                      strokeWidth={3}
-                      fillOpacity={1}
-                      fill="url(#colorVisitors)"
-                    />
+                    {siteConfig.map((site) => (
+                      <Area
+                        key={site.key}
+                        type="monotone"
+                        dataKey={site.key}
+                        stroke={site.color}
+                        strokeWidth={2.5}
+                        fillOpacity={1}
+                        fill={`url(#${site.gradientId})`}
+                        name={site.key}
+                      />
+                    ))}
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-white/10">
+              <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
+                {/* Legend */}
+                <div className="flex flex-wrap items-center gap-4 justify-center">
+                  {siteConfig.map((site) => (
+                    <div key={site.key} className="flex items-center gap-2">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: site.color }}
+                      />
+                      <span className="text-xs text-gray-300 font-medium">{site.name}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Total visitors */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">Total visitors</span>
-                  <span className="text-2xl font-bold text-white">5,310</span>
+                  <span className="text-sm text-gray-400">Combined total visitors</span>
+                  <span className="text-2xl font-bold text-white">14,720</span>
                 </div>
               </div>
             </Card>

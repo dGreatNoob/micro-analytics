@@ -68,7 +68,7 @@ export default function SignUpPage() {
       {/* Back to home link */}
       <Link
         href="/"
-        className="absolute top-6 left-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute top-6 left-6 flex items-center gap-2 text-sm text-gray-200 hover:text-white transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to home
@@ -84,8 +84,8 @@ export default function SignUpPage() {
                 Microlytics
               </div>
             </Link>
-            <h1 className="text-2xl font-bold text-foreground mb-2">Create your account</h1>
-            <p className="text-muted-foreground">Start tracking your website analytics today</p>
+            <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
+            <p className="text-gray-200">Start tracking your website analytics today</p>
           </div>
 
           {/* Sign up form */}
@@ -133,7 +133,7 @@ export default function SignUpPage() {
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 required
               />
-              <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+              <p className="text-xs text-gray-300">Must be at least 8 characters</p>
             </div>
 
             <div className="space-y-2">
@@ -159,7 +159,7 @@ export default function SignUpPage() {
                 onChange={(e) => handleInputChange("terms", e.target.checked)}
                 required 
               />
-              <label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed">
+              <label htmlFor="terms" className="text-sm text-gray-200 leading-relaxed">
                 I agree to the{" "}
                 <Link href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
                   Terms of Service
@@ -186,7 +186,7 @@ export default function SignUpPage() {
               <div className="w-full border-t border-border/50" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-card px-2 text-gray-300">Or continue with</span>
             </div>
           </div>
 
@@ -213,7 +213,7 @@ export default function SignUpPage() {
           </div>
 
           {/* Login link */}
-          <p className="text-center text-sm text-muted-foreground mt-6">
+          <p className="text-center text-sm text-gray-200 mt-6">
             Already have an account?{" "}
             <Link href="/login" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
               Sign in
@@ -223,8 +223,8 @@ export default function SignUpPage() {
 
         {/* Trust badges */}
         <div className="mt-8 text-center">
-          <p className="text-xs text-muted-foreground mb-3">Join 10,000+ developers already using Microlytics</p>
-          <div className="flex items-center justify-center gap-6 opacity-50">
+          <p className="text-xs text-gray-300 mb-3">Join 10,000+ developers already using Microlytics</p>
+          <div className="flex items-center justify-center gap-6 text-gray-200">
             <div className="text-xs">🔒 SSL Encrypted</div>
             <div className="text-xs">✓ GDPR Compliant</div>
             <div className="text-xs">⚡ SOC 2 Certified</div>
