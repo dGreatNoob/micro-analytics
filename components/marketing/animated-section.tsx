@@ -30,7 +30,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
       transition: {
         duration: 0.8,
         delay,
-        ease: [0.42, 0, 0.58, 1], // Smooth ease-in-out
+        ease: "easeInOut" as const,
         staggerChildren: 0.1,
         delayChildren: delay + 0.1
       }
@@ -39,7 +39,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
       opacity: 0,
       transition: {
         duration: 0.5,
-        ease: [0.42, 0, 0.58, 1]
+        ease: "easeInOut" as const
       }
     }
   }
@@ -52,7 +52,7 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
       opacity: 1,
       transition: {
         duration: 0.6,
-        ease: [0.42, 0, 0.58, 1]
+        ease: "easeInOut" as const
       }
     }
   }

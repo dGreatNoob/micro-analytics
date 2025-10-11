@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { BarChart3, Menu } from "lucide-react"
+import { Menu } from "lucide-react"
 import { useState } from "react"
+import Image from "next/image"
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -25,13 +26,19 @@ export function Header() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 sm:h-16 items-center justify-between">
-          <button 
-            onClick={() => scrollToSection("section-0")} 
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-blue-400" />
-            <span className="text-lg sm:text-xl font-semibold text-white">Microlytics</span>
-          </button>
+              <button
+                onClick={() => scrollToSection("section-0")}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <Image 
+                  src="/app_icon.png" 
+                  alt="Microlytics Logo" 
+                  width={32} 
+                  height={32} 
+                  className="h-8 w-8 sm:h-9 sm:w-9"
+                />
+                <span className="text-lg sm:text-xl font-semibold text-white">Microlytics</span>
+              </button>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 lg:gap-8">

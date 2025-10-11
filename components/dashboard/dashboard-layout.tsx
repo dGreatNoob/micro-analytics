@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { UserDropdown } from "@/components/dashboard/user-dropdown"
+import Image from "next/image"
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -51,6 +52,13 @@ export function DashboardLayout({
               <Menu className="h-5 w-5" />
             </Button>
             <Link href="/dashboard" className="flex items-center gap-2">
+              <Image 
+                src="/app_icon.png" 
+                alt="Microlytics Logo" 
+                width={28} 
+                height={28} 
+                className="h-7 w-7"
+              />
               <h1 className="text-xl font-semibold text-foreground">Microlytics</h1>
             </Link>
           </div>
