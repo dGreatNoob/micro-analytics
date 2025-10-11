@@ -265,7 +265,7 @@ export default function AuthPage() {
               <div className="w-full border-t border-white/20"></div>
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-transparent px-4 text-sm font-medium text-gray-400 uppercase tracking-wider">
+              <span className="px-4 text-sm font-medium text-gray-400 uppercase tracking-wider" style={{ backgroundColor: 'hsl(var(--background))' }}>
                 or continue with email
               </span>
             </div>

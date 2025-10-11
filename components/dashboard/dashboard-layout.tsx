@@ -7,7 +7,11 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
+<<<<<<< HEAD
 import { LayoutDashboard, FileText, ExternalLink, Monitor, Moon, Sun, Menu, X, Settings } from "lucide-react"
+=======
+import { LayoutDashboard, FileText, ExternalLink, Monitor, Moon, Sun, Menu, X, Globe } from "lucide-react"
+>>>>>>> origin/main
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
