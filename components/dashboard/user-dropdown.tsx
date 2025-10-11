@@ -14,12 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { User, Settings, LogOut, ChevronDown } from "lucide-react"
+import { User, Settings, LogOut, ChevronDown, Loader2 } from "lucide-react"
 import { signOut } from "next-auth/react"
 
 export function UserDropdown({ session }: { session: Session }) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const user = session.user
   const userName = user?.name || user?.email?.split('@')[0] || 'User'
@@ -28,11 +29,12 @@ export function UserDropdown({ session }: { session: Session }) {
     .map(n => n[0])
     .join('')
     .toUpperCase()
-    .slice(0, 2) || 'U'
+    .slice(0, 2) || user?.email?.[0].toUpperCase() || 'U'
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" })
+    setIsLoggingOut(true)
     setIsOpen(false)
+    await signOut({ callbackUrl: "/" })
   }
 
   return (
@@ -77,9 +79,22 @@ export function UserDropdown({ session }: { session: Session }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 text-red-600 focus:text-red-600">
-          <LogOut className="h-4 w-4" />
-          Logout
+        <DropdownMenuItem 
+          onClick={handleLogout} 
+          disabled={isLoggingOut}
+          className="flex items-center gap-2 text-red-600 focus:text-red-600 disabled:opacity-50"
+        >
+          {isLoggingOut ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Logging out...
+            </>
+          ) : (
+            <>
+              <LogOut className="h-4 w-4" />
+              Logout
+            </>
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
