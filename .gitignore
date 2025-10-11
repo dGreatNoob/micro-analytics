@@ -75,3 +75,6 @@ prisma/.env
 
 
 /lib/generated/prisma
+
+#cursor
+.cursorrules

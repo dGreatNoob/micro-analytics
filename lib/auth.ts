@@ -1,5 +1,4 @@
 import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import Google from "next-auth/providers/google"
 import GitHub from "next-auth/providers/github"
 import Credentials from "next-auth/providers/credentials"
@@ -7,17 +6,18 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  // Removed PrismaAdapter - it conflicts with JWT sessions
+  // We'll manually manage users in the signIn callback
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
+      // Removed allowDangerousEmailAccountLinking - security risk
     }),
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
+      // Removed allowDangerousEmailAccountLinking - security risk
     }),
     Credentials({
       name: "credentials",
@@ -64,29 +64,77 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/auth/error",
   },
   callbacks: {
-    async session({ session, user, token }) {
-      // For JWT sessions (credentials), get user id from token
-      if (token) {
-        session.user.id = token.sub as string
+    async jwt({ token, user, account }) {
+      // Initial sign in - store user info in token
+      if (user) {
+        token.id = user.id
+        token.email = user.email
+        token.name = user.name
+        token.picture = user.image
       }
-      // For database sessions (OAuth), get user id from user object
-      else if (user) {
-        session.user.id = user.id
+      
+      // Store provider info for reference
+      if (account) {
+        token.provider = account.provider
+      }
+      
+      return token
+    },
+    
+    async session({ session, token }) {
+      // Add user info to session from JWT token
+      if (token && session.user) {
+        session.user.id = token.id as string
+        session.user.email = token.email as string
+        session.user.name = token.name as string
+        session.user.image = token.picture as string
       }
       return session
     },
-    async jwt({ token, user, account }) {
-      // Store user id in JWT token on first sign in
-      if (user) {
-        token.sub = user.id
-      }
-      return token
-    },
+    
     async signIn({ user, account, profile }) {
-      // isNewUser is no longer available in the signIn callback
-      // If you need to detect new users, you can check the database
-      return true
+      try {
+        // For OAuth providers, manually create/update user in database
+        if (account?.provider === "google" || account?.provider === "github") {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          })
+          
+          if (!existingUser) {
+            // Create new user
+            const newUser = await prisma.user.create({
+              data: {
+                email: user.email!,
+                name: user.name || user.email!.split('@')[0],
+                image: user.image,
+                emailVerified: new Date(),
+              }
+            })
+            
+            // Update user object with our database ID
+            user.id = newUser.id
+          } else {
+            // Update existing user's info
+            await prisma.user.update({
+              where: { email: user.email! },
+              data: {
+                name: user.name || existingUser.name,
+                image: user.image || existingUser.image,
+                emailVerified: new Date(),
+              }
+            })
+            
+            user.id = existingUser.id
+          }
+        }
+        
+        return true
+      } catch (error) {
+        console.error("SignIn callback error:", error)
+        return false
+      }
     },
+    
     async redirect({ url, baseUrl }) {
       // If the URL is relative (starts with /), allow it
       if (url.startsWith("/")) {
