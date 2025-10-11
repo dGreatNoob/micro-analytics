@@ -34,16 +34,16 @@ export function UserDropdown({ session }: { session: Session }) {
   const handleLogout = async () => {
     setIsLoggingOut(true)
     setIsOpen(false)
-    try {
-      await signOut({ 
-        callbackUrl: "/",
-        redirect: true 
-      })
-    } catch (error) {
+    
+    // Immediately redirect to home page for better UX
+    router.push("/")
+    
+    // Let signOut cleanup happen in the background
+    signOut({ 
+      redirect: false 
+    }).catch((error) => {
       console.error("Logout error:", error)
-      // Force redirect on error
-      router.push("/")
-    }
+    })
   }
 
   return (
