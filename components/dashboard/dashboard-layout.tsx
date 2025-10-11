@@ -7,7 +7,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
-import { LayoutDashboard, FileText, ExternalLink, Monitor, Moon, Sun, Menu, X } from "lucide-react"
+import { LayoutDashboard, FileText, ExternalLink, Monitor, Moon, Sun, Menu, X, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,7 @@ import Image from "next/image"
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Sites", href: "/dashboard/sites", icon: Globe },
   { name: "Pages", href: "/dashboard/pages", icon: FileText },
   { name: "Referrers", href: "/dashboard/referrers", icon: ExternalLink },
   { name: "Devices", href: "/dashboard/devices", icon: Monitor },
