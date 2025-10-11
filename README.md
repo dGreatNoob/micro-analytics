@@ -1,4 +1,4 @@
-# 🚀 Microlytics
+# My startup Saas idea born from a long series of homesickness, boredome and the strong desire to be rich lmao
 
 **Privacy-First Website Analytics Platform**
 
@@ -13,15 +13,25 @@ Beautiful, simple, privacy-first analytics for your websites. No cookies, no tra
 
 ## ✅ Current Status
 
-**Progress:** Phase 2 Complete (31%)
+**Progress:** Phase 2.1 Complete (33%) - Authentication Fully Working! 🎉
 
-- ✅ **Landing Page** - Fully animated with smooth scrolling
+- ✅ **Landing Page** - Smooth animations & modern UI
 - ✅ **Database** - PostgreSQL + Prisma + Docker
-- ✅ **Authentication** - Google & GitHub OAuth
+- ✅ **Authentication** - Google, GitHub & Email/Password (JWT sessions)
+- ✅ **Password Auth** - Bcrypt hashing + verification
+- ✅ **Session Management** - JWT-based, 30-day expiry
 - ✅ **Welcome Emails** - Resend integration
-- ✅ **Dashboard** - Protected routes
+- ✅ **Dashboard** - Protected routes with auto-redirect
 - ⏳ **Tracking Script** - Coming next (Phase 3)
 - ⏸️ **Analytics** - Not yet implemented
+
+### Recent Fixes (Oct 11, 2025)
+- 🔧 Fixed "stuck at signin" bug
+- 🔧 Switched to JWT sessions (works with all auth methods)
+- 🔧 Added password field & proper hashing
+- 🔧 All sign-in methods working perfectly
+
+📖 See [AUTH-FIX-JWT-SESSIONS.md](./AUTH-FIX-JWT-SESSIONS.md) for complete details.
 
 ---
 
@@ -60,18 +70,19 @@ Visit http://localhost:3000 🎉
 ## 📚 Documentation
 
 **Quick Guides:**
-- [`docs/EMAIL-QUICK-START.md`](docs/EMAIL-QUICK-START.md) - Email setup (5 min)
+- [`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md) - Initial setup
 - [`docs/DOCKER-SETUP.md`](docs/DOCKER-SETUP.md) - Database guide
 - [`docs/AUTH-SETUP.md`](docs/AUTH-SETUP.md) - OAuth credentials
+- [`docs/EMAIL-QUICK-START.md`](docs/EMAIL-QUICK-START.md) - Email setup (5 min)
 
 **Development:**
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) - Master development plan
-- [`docs/PROGRESS-SUMMARY.md`](docs/PROGRESS-SUMMARY.md) - Current status
+- [`docs/PROGRESS-SUMMARY.md`](docs/PROGRESS-SUMMARY.md) - Current status (33%)
 - [`docs/EMAIL-NOTIFICATIONS.md`](docs/EMAIL-NOTIFICATIONS.md) - Email system
 
-**Completed Phases:**
-- [`docs/SETUP-COMPLETE.md`](docs/SETUP-COMPLETE.md) - Phase 1
-- [`docs/PHASE-2-COMPLETE.md`](docs/PHASE-2-COMPLETE.md) - Phase 2
+**Authentication (Important):**
+- [`AUTH-FIX-JWT-SESSIONS.md`](./AUTH-FIX-JWT-SESSIONS.md) - Auth troubleshooting
+- [`SIGNIN-FIXES-SUMMARY.md`](./SIGNIN-FIXES-SUMMARY.md) - Implementation details
 
 ---
 

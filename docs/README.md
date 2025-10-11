@@ -1,38 +1,49 @@
 # 📚 Documentation
 
-This folder contains essential documentation for the Micro-Analytics project.
+Essential documentation for the Microlytics project.
 
-## 📄 Available Documents
+---
 
-### 🚀 **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)**
-Complete guide for deploying your application to production.
-- Vercel deployment (recommended)
-- Netlify, Railway, and self-hosted options
-- Environment variables setup
-- Security considerations
-- CI/CD pipeline configuration
-- Post-deployment checklist
+## 🚀 Quick Start Guides
 
-### 🎉 **[MIGRATION_SUCCESS.md](./MIGRATION_SUCCESS.md)**
-Comprehensive summary of the migration from two separate apps to a unified structure.
-- Complete migration timeline (Phases 1-3)
-- Performance improvements and bundle size optimizations
-- Final application structure
-- Before/after comparison
-- Success metrics and results
+### Initial Setup
+- **[GETTING-STARTED.md](./GETTING-STARTED.md)** - Complete project setup
+- **[DOCKER-SETUP.md](./DOCKER-SETUP.md)** - Database configuration
+- **[EMAIL-QUICK-START.md](./EMAIL-QUICK-START.md)** - Email setup (5 minutes)
+
+### Authentication
+- **[AUTH-SETUP.md](./AUTH-SETUP.md)** - OAuth credentials & setup
+- **[../AUTH-FIX-JWT-SESSIONS.md](../AUTH-FIX-JWT-SESSIONS.md)** - Auth troubleshooting & JWT sessions
+- **[../SIGNIN-FIXES-SUMMARY.md](../SIGNIN-FIXES-SUMMARY.md)** - Implementation details
+
+### Deployment
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Production deployment guide
+- **[EMAIL-NOTIFICATIONS.md](./EMAIL-NOTIFICATIONS.md)** - Email system setup
+
+---
+
+## 📋 Planning & Progress
+
+- **[ROADMAP.md](./ROADMAP.md)** - Development roadmap (8 phases)
+- **[PROGRESS-SUMMARY.md](./PROGRESS-SUMMARY.md)** - Current status (33% complete)
 
 ---
 
 ## 🗂️ Quick Reference
 
 ### For Development
-- See main **[README.md](../README.md)** in the root directory for setup instructions
-- Check **[MIGRATION_SUCCESS.md](./MIGRATION_SUCCESS.md)** for architecture decisions
+- Main setup: **[GETTING-STARTED.md](./GETTING-STARTED.md)**
+- Root README: **[../README.md](../README.md)**
+- Current progress: **[PROGRESS-SUMMARY.md](./PROGRESS-SUMMARY.md)**
 
 ### For Deployment
-- Follow **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** for production deployment
-- All deployment options covered (Vercel, Netlify, Railway, Docker)
+- Production guide: **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)**
+- All platforms covered (Vercel, Netlify, Railway, Docker)
+
+### For Troubleshooting
+- Auth issues: **[../AUTH-FIX-JWT-SESSIONS.md](../AUTH-FIX-JWT-SESSIONS.md)**
+- Email setup: **[EMAIL-QUICK-START.md](./EMAIL-QUICK-START.md)**
 
 ---
 
-**Last updated**: October 9, 2025
+**Last updated**: October 11, 2025

@@ -1,19 +1,24 @@
 # Authentication Setup Guide
 
-**Phase 2 Complete!** ✅ NextAuth.js is configured with Google & GitHub OAuth
+**Phase 2.1 Complete!** ✅ NextAuth.js with Google, GitHub & Email/Password Auth
+
+> **Important:** This app uses **JWT sessions** (not database sessions). See [`/AUTH-FIX-JWT-SESSIONS.md`](../AUTH-FIX-JWT-SESSIONS.md) for details.
 
 ---
 
 ## 🎯 What's Been Set Up
 
 - ✅ NextAuth.js v5 installed
-- ✅ Prisma adapter configured
+- ✅ Prisma adapter configured (for OAuth)
 - ✅ Google OAuth provider
 - ✅ GitHub OAuth provider
+- ✅ Email/Password authentication (Credentials provider)
+- ✅ Password hashing with bcrypt (12 rounds)
+- ✅ JWT session management (30-day expiry)
 - ✅ Sign-in page at `/auth/signin`
 - ✅ Protected routes middleware
 - ✅ Dashboard page
-- ✅ Auth session management
+- ✅ Automatic redirect to dashboard after signin
 
 ---
 
@@ -194,12 +199,13 @@ Middleware automatically redirects to `/auth/signin` if not logged in.
 8. Redirects to /dashboard
 ```
 
-### Database Session
+### JWT Sessions
 
-- **Strategy:** Database sessions (more secure)
-- **Storage:** PostgreSQL via Prisma
-- **Session table:** Stores active sessions
-- **Account table:** Links OAuth accounts to users
+- **Strategy:** JWT sessions (works with all providers)
+- **Storage:** Encrypted JWT tokens in httpOnly cookies
+- **Expiry:** 30 days (configurable)
+- **Security:** Encrypted with NEXTAUTH_SECRET
+- **Account table:** Links OAuth accounts to users (OAuth only)
 
 ---
 

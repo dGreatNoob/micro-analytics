@@ -345,6 +345,72 @@ DELETE FROM "Session";
 
 ---
 
+## 🔄 Redirect Configuration
+
+All sign-ins now properly redirect to `/dashboard` after successful authentication.
+
+### How Redirects Work
+
+#### OAuth (Google/GitHub)
+The sign-in buttons include the callback URL:
+```typescript
+const handleGoogleAuth = () => {
+  setIsGoogleLoading(true)
+  signIn("google", { callbackUrl: "/dashboard" })
+}
+
+const handleGitHubAuth = () => {
+  setIsGitHubLoading(true)
+  signIn("github", { callbackUrl: "/dashboard" })
+}
+```
+
+#### Credentials (Email/Password)
+Uses Next.js router for client-side navigation:
+```typescript
+const result = await signIn("credentials", {
+  email: formData.email,
+  password: formData.password,
+  redirect: false,
+  callbackUrl: "/dashboard",
+})
+
+if (result?.ok) {
+  router.push("/dashboard")  // Client-side navigation (faster)
+}
+```
+
+#### Redirect Callback (Security)
+Prevents open redirect vulnerabilities:
+```typescript
+async redirect({ url, baseUrl }) {
+  // Allow relative URLs like "/dashboard"
+  if (url.startsWith("/")) {
+    return `${baseUrl}${url}`
+  }
+  // Allow same-origin URLs
+  else if (new URL(url).origin === baseUrl) {
+    return url
+  }
+  // Block external URLs, default to dashboard
+  return `${baseUrl}/dashboard`
+}
+```
+
+### What This Protects Against
+
+**Open Redirect Attack:**
+- Attacker tries: `/auth/signin?callbackUrl=http://evil.com/phishing`
+- Without protection: User redirects to `evil.com` ❌
+- With protection: User redirects to `/dashboard` ✅
+
+**Tested Scenarios:**
+- ✅ `/dashboard` → Works
+- ✅ `http://localhost:3000/profile` → Works
+- ❌ `http://evil.com` → Blocked, redirects to `/dashboard`
+
+---
+
 ## 🐛 Troubleshooting
 
 ### Issue: Still stuck at signin page
