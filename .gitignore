@@ -61,3 +61,17 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
+# Docker
+docker-compose.override.yml
+
+# Database backups
+backups/
+*.sql
+
+# Prisma
+prisma/.env
+*.db
+*.db-journal
+
+
+/lib/generated/prisma
