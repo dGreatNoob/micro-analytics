@@ -244,7 +244,36 @@ CREATE TABLE "User" (
 | Session Persistence | ✅ Working |
 | Protected Routes | ✅ Working |
 | Account Linking | ✅ Enabled |
-| Database Sessions | ✅ Working |
+| Session Strategy | ✅ JWT (Fixed from database) |
+
+---
+
+## 🔧 Critical Fix: JWT Sessions
+
+### Issue Found
+After initial fixes, users were **stuck at the signin page** for all authentication methods.
+
+### Root Cause
+- ❌ Credentials provider doesn't work with Prisma adapter + database sessions in NextAuth v5
+- ❌ OAuth logins would create sessions, but credentials wouldn't
+- ❌ This caused users to be stuck in a redirect loop
+
+### Solution
+**Switched from database sessions to JWT sessions:**
+```typescript
+session: {
+  strategy: "jwt",  // Changed from "database"
+  maxAge: 30 * 24 * 60 * 60, // 30 days
+}
+```
+
+### Benefits
+- ✅ Works with ALL auth providers (OAuth + Credentials)
+- ✅ No database queries on every request (faster)
+- ✅ Better performance and scalability
+- ✅ Proper session creation for all methods
+
+**See `AUTH-FIX-JWT-SESSIONS.md` for complete details.**
 
 ---
 

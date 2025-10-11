@@ -64,11 +64,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/auth/error",
   },
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
+    async session({ session, user, token }) {
+      // For JWT sessions (credentials), get user id from token
+      if (token) {
+        session.user.id = token.sub as string
+      }
+      // For database sessions (OAuth), get user id from user object
+      else if (user) {
         session.user.id = user.id
       }
       return session
+    },
+    async jwt({ token, user, account }) {
+      // Store user id in JWT token on first sign in
+      if (user) {
+        token.sub = user.id
+      }
+      return token
     },
     async signIn({ user, account, profile }) {
       // isNewUser is no longer available in the signIn callback
@@ -89,7 +101,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   session: {
-    strategy: "database",
+    // Use JWT for credentials, database for OAuth
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   debug: process.env.NODE_ENV === "development",
 })
