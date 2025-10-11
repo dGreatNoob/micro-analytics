@@ -61,6 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/auth/signin",
+    signOut: "/",
     error: "/auth/error",
   },
   callbacks: {
@@ -144,8 +145,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       else if (new URL(url).origin === baseUrl) {
         return url
       }
-      // Default to dashboard
-      return `${baseUrl}/dashboard`
+      // For signout or other callbacks, go to home
+      // For signin, go to dashboard
+      return baseUrl
     },
   },
   session: {

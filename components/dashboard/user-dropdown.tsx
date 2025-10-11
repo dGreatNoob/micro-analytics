@@ -34,7 +34,16 @@ export function UserDropdown({ session }: { session: Session }) {
   const handleLogout = async () => {
     setIsLoggingOut(true)
     setIsOpen(false)
-    await signOut({ callbackUrl: "/" })
+    try {
+      await signOut({ 
+        callbackUrl: "/",
+        redirect: true 
+      })
+    } catch (error) {
+      console.error("Logout error:", error)
+      // Force redirect on error
+      router.push("/")
+    }
   }
 
   return (
