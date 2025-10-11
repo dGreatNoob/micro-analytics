@@ -1,0 +1,98 @@
+# ===========================================
+# Cursor Rules — Microlytics Project Context
+# ===========================================
+
+project_name: Microlytics
+project_type: SaaS (Privacy-First Web Analytics)
+author: Belteshazzar Marquez
+last_updated: 2025-10-11
+
+# -------------------------
+# 🔧 Context & Guidelines
+# -------------------------
+You are working on **Microlytics**, a privacy-first web analytics platform.
+Tech stack:
+- Next.js 15 (App Router, TypeScript)
+- Prisma ORM + PostgreSQL
+- NextAuth.js with JWT sessions
+- Resend (email service)
+- Tailwind CSS + shadcn/ui
+- Hosted on Vercel
+
+Current Progress:
+- ✅ Database + Schema (Phase 1)
+- ✅ Authentication (Phase 2)
+- ✅ Welcome Email System (Phase 2.5)
+- ⏳ Next Tasks: Tracking Script (Phase 3) and Data Ingestion API (Phase 4)
+- 🎯 Goal: Public MVP Launch by mid-November 2025
+
+Reference Docs:
+- `docs/ROADMAP_v2.md` — authoritative roadmap
+- `docs/PROGRESS-SUMMARY.md` — detailed status tracker
+
+# -------------------------
+# 🧭 Development Principles
+# -------------------------
+rules:
+  - Always align with the current roadmap (do not add unplanned features).
+  - Never modify working components unless debugging or extending as planned.
+  - Write concise, readable TypeScript with strong typing.
+  - Follow privacy standards: no cookies, no personal data storage, IPs must be masked.
+  - Maintain small, composable functions and modular files.
+  - Keep new dependencies minimal and justified.
+  - Document logic inline (JSDoc-style comments preferred).
+  - Optimize for fast build and deploy times on Vercel.
+  - Use environment variables for all secrets (no hard-coded keys).
+  - Follow existing file conventions in `/lib`, `/app/api`, `/components`, and `/docs`.
+
+# -------------------------
+# 🧱 Active Development Focus
+# -------------------------
+focus:
+  - Implement the tracking script at `public/m.js`
+  - Build `/api/track` endpoint using Next.js Route Handlers
+  - Validate requests, parse user-agent, and store analytics data
+  - Create minimal Prisma models and queries for pageviews
+  - Test tracking end-to-end with dashboard placeholder data
+  - Avoid touching authentication, email, or DB schema (already working)
+
+# -------------------------
+# 🧩 Style Preferences
+# -------------------------
+style:
+  - Use ESLint and Prettier defaults.
+  - Use async/await syntax; avoid callbacks.
+  - Type all function parameters and returns explicitly.
+  - Prefer named exports unless Next.js convention dictates otherwise.
+  - Keep code comments brief but meaningful.
+  - Write commit messages following Conventional Commits format.
+
+# -------------------------
+# 🧠 Tone & Behavior
+# -------------------------
+assistant_behavior:
+  - Be direct and concise.
+  - Provide actionable implementation steps.
+  - Assume solo developer setup — no team-level coordination.
+  - Prioritize execution speed over extra abstraction.
+  - Avoid over-engineering or adding libraries unnecessarily.
+
+# -------------------------
+# 🚀 Output Expectation
+# -------------------------
+output:
+  - Production-quality, deploy-ready code.
+  - Inline explanations only when necessary.
+  - Respect current roadmap phases strictly.
+  - Any new suggestion must state its roadmap alignment (e.g., “Phase 3.1 improvement”).
+
+# -------------------------
+# 📅 Roadmap Reference
+# -------------------------
+timeline:
+  Week 2 (Oct 14–20): Build tracking script
+  Week 3 (Oct 21–26): Implement data ingestion API
+  Week 4 (Oct 27–Nov 3): Dashboard data layer
+  Week 5 (Nov 4–9): Site management
+  Week 6 (Nov 10–15): Testing and deployment
+  Week 7 (Nov 18–20): Public MVP launch
