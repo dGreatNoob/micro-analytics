@@ -23,46 +23,36 @@ export function AnimatedSection({ children, id, className = "", delay = 0, style
 
   const containerVariants = {
     hidden: { 
-      opacity: 0, 
-      y: 30,
-      scale: 0.98
+      opacity: 0
     },
     visible: {
       opacity: 1,
-      y: 0,
-      scale: 1,
       transition: {
         duration: 0.8,
         delay,
-        ease: [0.25, 0.46, 0.45, 0.94], // Smooth curved easing
-        staggerChildren: 0.12,
-        delayChildren: delay + 0.15
+        ease: [0.42, 0, 0.58, 1], // Smooth ease-in-out
+        staggerChildren: 0.1,
+        delayChildren: delay + 0.1
       }
     },
     exit: {
       opacity: 0,
-      y: -30,
-      scale: 0.98,
       transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.5,
+        ease: [0.42, 0, 0.58, 1]
       }
     }
   }
 
   const itemVariants = {
     hidden: { 
-      opacity: 0, 
-      y: 20,
-      scale: 0.99
+      opacity: 0
     },
     visible: {
       opacity: 1,
-      y: 0,
-      scale: 1,
       transition: {
-        duration: 0.7,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.6,
+        ease: [0.42, 0, 0.58, 1]
       }
     }
   }
