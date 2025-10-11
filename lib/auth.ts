@@ -36,12 +36,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         })
 
-        if (!user) {
+        if (!user || !user.password) {
           return null
         }
 
-        // For now, we'll skip password verification since we don't have password field in our schema
-        // In a real app, you'd hash passwords and verify them here
+        // Verify password
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password as string,
+          user.password
+        )
+
+        if (!isPasswordValid) {
+          return null
+        }
+
         return {
           id: user.id,
           email: user.email,
@@ -66,6 +74,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // isNewUser is no longer available in the signIn callback
       // If you need to detect new users, you can check the database
       return true
+    },
+    async redirect({ url, baseUrl }) {
+      // If the URL is relative (starts with /), allow it
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`
+      }
+      // If the URL is on the same origin, allow it
+      else if (new URL(url).origin === baseUrl) {
+        return url
+      }
+      // Default to dashboard
+      return `${baseUrl}/dashboard`
     },
   },
   session: {

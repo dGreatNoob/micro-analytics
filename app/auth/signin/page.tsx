@@ -2,6 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -13,6 +14,7 @@ import Image from "next/image"
 type AuthMode = "signin" | "signup"
 
 export default function AuthPage() {
+  const router = useRouter()
   const [mode, setMode] = useState<AuthMode>("signin")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -105,12 +107,14 @@ export default function AuthPage() {
           email: formData.email,
           password: formData.password,
           redirect: false,
+          callbackUrl: "/dashboard",
         })
         
         if (result?.error) {
           setErrors({ general: "Account created but failed to sign in" })
-        } else {
-          window.location.href = "/dashboard"
+        } else if (result?.ok) {
+          // Successfully signed in, redirect to dashboard
+          router.push("/dashboard")
         }
       } else {
         // Handle signin
@@ -118,12 +122,14 @@ export default function AuthPage() {
           email: formData.email,
           password: formData.password,
           redirect: false,
+          callbackUrl: "/dashboard",
         })
         
         if (result?.error) {
           setErrors({ general: "Invalid credentials" })
-        } else {
-          window.location.href = "/dashboard"
+        } else if (result?.ok) {
+          // Successfully signed in, redirect to dashboard
+          router.push("/dashboard")
         }
       }
     } catch (error) {

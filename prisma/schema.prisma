@@ -15,6 +15,7 @@ model User {
   name          String?
   emailVerified DateTime?
   image         String?
+  password      String?   // For credentials login (optional - OAuth users won't have this)
   
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
