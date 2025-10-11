@@ -1,213 +1,65 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
-import { Plus, Globe, Calendar, Copy, Pencil, Trash2, ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { Plus, Settings, Trash2, ExternalLink, Copy } from "lucide-react"
+import { Site, CreateSiteRequest, ApiErrorResponse } from "@/types/site"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
-
-interface Site {
-  id: string
-  name: string
-  domain: string
-  siteId: string
-  timezone: string
-  isPublic: boolean
-  createdAt: string
-  updatedAt: string
-}
 
 export default function SitesPage() {
-  const router = useRouter()
   const [sites, setSites] = useState<Site[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [error, setError] = useState("")
+  const [isCreating, setIsCreating] = useState(false)
+  const [showCreateForm, setShowCreateForm] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
+  // Form state
+  const [formData, setFormData] = useState({
+    name: "",
+    domain: "",
+    timezone: "UTC",
+  })
+
+  // Load sites on component mount
   useEffect(() => {
-    fetchSites()
+    loadSites()
   }, [])
 
-  const fetchSites = async () => {
+  const loadSites = async () => {
     try {
       setIsLoading(true)
       const response = await fetch("/api/sites")
       const data = await response.json()
-      
-      if (response.ok) {
+
+      if (data.success) {
         setSites(data.sites)
       } else {
-        setError(data.error || "Failed to fetch sites")
+        setError(data.error || "Failed to load sites")
       }
     } catch (err) {
-      setError("An error occurred while fetching sites")
+      setError("Failed to load sites")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-    // TODO: Add toast notification
-    alert("Copied to clipboard!")
-  }
-
-  const handleSiteCreated = () => {
-    setShowCreateModal(false)
-    fetchSites()
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-muted-foreground">Loading sites...</div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Sites</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage your tracked websites
-          </p>
-        </div>
-        <Button 
-          onClick={() => setShowCreateModal(true)}
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Create New Site
-        </Button>
-      </div>
-
-      {/* Error State */}
-      {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500">
-          {error}
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!isLoading && sites.length === 0 && (
-        <Card className="p-12 text-center">
-          <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">No sites yet</h2>
-          <p className="text-muted-foreground mb-6">
-            Create your first site to start tracking analytics
-          </p>
-          <Button onClick={() => setShowCreateModal(true)} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Create Your First Site
-          </Button>
-        </Card>
-      )}
-
-      {/* Sites Grid */}
-      {sites.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {sites.map((site) => (
-            <Card key={site.id} className="p-6 hover:shadow-lg transition-shadow">
-              <div className="space-y-4">
-                {/* Site Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-lg truncate">
-                      {site.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                      <Globe className="h-3 w-3" />
-                      {site.domain}
-                    </p>
-                  </div>
-                  <Link href={`/dashboard/sites/${site.id}`}>
-                    <Button variant="ghost" size="sm">
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* Site ID */}
-                <div className="space-y-2">
-                  <label className="text-xs text-muted-foreground">Site ID</label>
-                  <div className="flex items-center gap-2">
-                    <code className="flex-1 px-3 py-2 bg-muted rounded text-xs font-mono truncate">
-                      {site.siteId}
-                    </code>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => copyToClipboard(site.siteId)}
-                    >
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Metadata */}
-                <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {new Date(site.createdAt).toLocaleDateString()}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Globe className="h-3 w-3" />
-                    {site.timezone}
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2 pt-2">
-                  <Link href={`/dashboard/sites/${site.id}`} className="flex-1">
-                    <Button variant="outline" size="sm" className="w-full gap-2">
-                      <Pencil className="h-3 w-3" />
-                      Manage
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {/* Create Site Modal */}
-      {showCreateModal && (
-        <CreateSiteModal
-          onClose={() => setShowCreateModal(false)}
-          onSuccess={handleSiteCreated}
-        />
-      )}
-    </div>
-  )
-}
-
-// Create Site Modal Component
-function CreateSiteModal({ 
-  onClose, 
-  onSuccess 
-}: { 
-  onClose: () => void
-  onSuccess: () => void
-}) {
-  const [formData, setFormData] = useState({
-    name: "",
-    domain: "",
-    timezone: "UTC"
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState("")
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleCreateSite = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setIsSubmitting(true)
+    
+    if (!formData.name || !formData.domain) {
+      setError("Name and domain are required")
+      return
+    }
 
     try {
+      setIsCreating(true)
+      setError(null)
+
       const response = await fetch("/api/sites", {
         method: "POST",
         headers: {
@@ -218,119 +70,235 @@ function CreateSiteModal({
 
       const data = await response.json()
 
-      if (response.ok) {
-        onSuccess()
+      if (data.success) {
+        setSites([data.site, ...sites])
+        setShowCreateForm(false)
+        setFormData({ name: "", domain: "", timezone: "UTC" })
       } else {
         setError(data.error || "Failed to create site")
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError("Failed to create site")
     } finally {
-      setIsSubmitting(false)
+      setIsCreating(false)
     }
   }
 
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md p-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Create New Site</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              ✕
-            </Button>
+  const handleDeleteSite = async (site: Site) => {
+    if (!confirm(`Are you sure you want to delete "${site.name}"? This will permanently delete all analytics data for this site.`)) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/sites/${site.id}`, {
+        method: "DELETE",
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setSites(sites.filter(s => s.id !== site.id))
+      } else {
+        setError(data.error || "Failed to delete site")
+      }
+    } catch (err) {
+      setError("Failed to delete site")
+    }
+  }
+
+  const copyTrackingScript = (site: Site) => {
+    const script = `<script async defer src="${window.location.origin}/m.js" data-site="${site.siteId}"></script>`
+    navigator.clipboard.writeText(script)
+  }
+
+  const getTrackingScript = (site: Site) => {
+    return `<script async defer src="${window.location.origin}/m.js" data-site="${site.siteId}"></script>`
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 max-w-6xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold text-foreground">Sites</h1>
+            <p className="text-sm text-muted-foreground mt-1">Manage your analytics sites</p>
           </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="p-6 bg-card border-border shadow-sm">
+              <div className="animate-pulse">
+                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-muted rounded w-1/2 mb-4"></div>
+                <div className="h-8 bg-muted rounded"></div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
-          {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-sm">
-              {error}
+  return (
+    <div className="space-y-6 max-w-6xl">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Sites</h1>
+          <p className="text-sm text-muted-foreground mt-1">Manage your analytics sites</p>
+        </div>
+        <Button onClick={() => setShowCreateForm(true)} className="gap-2">
+          <Plus className="h-4 w-4" />
+          Add Site
+        </Button>
+      </div>
+
+      {/* Error Message */}
+      {error && (
+        <Card className="p-4 bg-destructive/10 border-destructive/20">
+          <p className="text-sm text-destructive">{error}</p>
+        </Card>
+      )}
+
+      {/* Create Site Form */}
+      {showCreateForm && (
+        <Card className="p-6 bg-card border-border shadow-sm">
+          <h2 className="text-lg font-semibold text-card-foreground mb-4">Create New Site</h2>
+          <form onSubmit={handleCreateSite} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="name">Site Name</Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="My Website"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="domain">Domain</Label>
+                <Input
+                  id="domain"
+                  value={formData.domain}
+                  onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
+                  placeholder="example.com"
+                  required
+                />
+              </div>
             </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Site Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="My Awesome Website"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="domain" className="text-sm font-medium">
-                Domain
-              </label>
-              <input
-                id="domain"
-                type="text"
-                value={formData.domain}
-                onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                className="w-full px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="example.com"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Enter your domain without http:// or https://
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="timezone" className="text-sm font-medium">
-                Timezone
-              </label>
-              <select
-                id="timezone"
-                value={formData.timezone}
-                onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
-                className="w-full px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="UTC">UTC</option>
-                <option value="America/New_York">Eastern Time</option>
-                <option value="America/Chicago">Central Time</option>
-                <option value="America/Denver">Mountain Time</option>
-                <option value="America/Los_Angeles">Pacific Time</option>
-                <option value="Europe/London">London</option>
-                <option value="Europe/Paris">Paris</option>
-                <option value="Asia/Tokyo">Tokyo</option>
-                <option value="Asia/Shanghai">Shanghai</option>
-                <option value="Australia/Sydney">Sydney</option>
-              </select>
-            </div>
-
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-2">
+              <Button type="submit" disabled={isCreating}>
+                {isCreating ? "Creating..." : "Create Site"}
+              </Button>
               <Button
                 type="button"
                 variant="outline"
-                onClick={onClose}
-                disabled={isSubmitting}
-                className="flex-1"
+                onClick={() => {
+                  setShowCreateForm(false)
+                  setFormData({ name: "", domain: "", timezone: "UTC" })
+                  setError(null)
+                }}
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="flex-1"
-              >
-                {isSubmitting ? "Creating..." : "Create Site"}
-              </Button>
             </div>
           </form>
+        </Card>
+      )}
+
+      {/* Sites Grid */}
+      {sites.length === 0 ? (
+        <Card className="p-12 text-center bg-card border-border shadow-sm">
+          <div className="max-w-md mx-auto">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Plus className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-semibold text-card-foreground mb-2">No sites yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Create your first site to start tracking analytics
+            </p>
+            <Button onClick={() => setShowCreateForm(true)} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create Your First Site
+            </Button>
+          </div>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sites.map((site) => (
+            <Card key={site.id} className="p-6 bg-card border-border shadow-sm">
+              <div className="space-y-4">
+                {/* Site Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-card-foreground truncate">{site.name}</h3>
+                    <p className="text-sm text-muted-foreground truncate">{site.domain}</p>
+                    <Badge variant="secondary" className="mt-1 text-xs">
+                      {site.isPublic ? "Public" : "Private"}
+                    </Badge>
+                  </div>
+                  <div className="flex gap-1 ml-2">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => router.push(`/dashboard/sites/${site.id}`)}
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleDeleteSite(site)}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Site ID */}
+                <div>
+                  <Label className="text-xs text-muted-foreground">Site ID</Label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="text-xs bg-muted px-2 py-1 rounded font-mono flex-1 truncate">
+                      {site.siteId}
+                    </code>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => navigator.clipboard.writeText(site.siteId)}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Tracking Script */}
+                <div>
+                  <Label className="text-xs text-muted-foreground">Tracking Script</Label>
+                  <div className="mt-1">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyTrackingScript(site)}
+                      className="w-full justify-start text-xs"
+                    >
+                      <Copy className="h-3 w-3 mr-2" />
+                      Copy Script
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Created Date */}
+                <div className="text-xs text-muted-foreground">
+                  Created {new Date(site.createdAt).toLocaleDateString()}
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
-      </Card>
+      )}
     </div>
   )
 }
-

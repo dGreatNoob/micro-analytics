@@ -4,7 +4,7 @@ import { StatCard } from "@/components/dashboard/stat-card"
 import { TimeRangeSelector } from "@/components/dashboard/time-range-selector"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Eye, Users, Clock, TrendingDown, Download } from "lucide-react"
+import { Eye, Users, Clock, TrendingDown, Download, Settings } from "lucide-react"
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts"
 
 // Sample data
@@ -53,6 +53,10 @@ export default function OverviewPage() {
             <Button variant="outline" size="sm" className="gap-2 bg-transparent">
               <Download className="h-4 w-4" />
               Export CSV
+            </Button>
+            <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={() => window.location.href = '/dashboard/sites'}>
+              <Settings className="h-4 w-4" />
+              Manage Sites
             </Button>
           </div>
         </div>

@@ -1,108 +1,101 @@
-import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { NextRequest } from "next/server"
 import { createId } from "@paralleldrive/cuid2"
+import { CreateSiteRequest, GetSitesResponse } from "@/types/site"
+import { createErrorResponse, createSuccessResponse, validateDomain, sanitizeDomain, ERROR_MESSAGES } from "@/lib/api-utils"
 
-// GET /api/sites - List all sites for authenticated user
-export async function GET(request: NextRequest) {
+/**
+ * GET /api/sites - Get all sites for the authenticated user
+ */
+export async function GET() {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return createErrorResponse(ERROR_MESSAGES.UNAUTHORIZED, 401)
     }
-    
+
     const sites = await prisma.site.findMany({
       where: {
-        userId: session.user.id
+        userId: session.user.id,
       },
       orderBy: {
-        createdAt: "desc"
+        createdAt: "desc",
       },
-      select: {
-        id: true,
-        name: true,
-        domain: true,
-        siteId: true,
-        timezone: true,
-        isPublic: true,
-        createdAt: true,
-        updatedAt: true,
-      }
     })
-    
-    return NextResponse.json({ sites })
+
+    return createSuccessResponse<GetSitesResponse>({
+      success: true,
+      sites,
+    })
   } catch (error) {
-    console.error("Error fetching sites:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch sites" },
-      { status: 500 }
-    )
+    console.error("Get sites error:", error)
+    return createErrorResponse(ERROR_MESSAGES.SERVER_ERROR, 500)
   }
 }
 
-// POST /api/sites - Create new site
+/**
+ * POST /api/sites - Create a new site
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
+      return createErrorResponse(ERROR_MESSAGES.UNAUTHORIZED, 401)
     }
-    
-    const body = await request.json()
-    const { name, domain, timezone } = body
-    
-    // Validate required fields
+
+    const body: CreateSiteRequest = await request.json()
+    const { name, domain, timezone = "UTC" } = body
+
+    // Validate input
     if (!name || !domain) {
-      return NextResponse.json(
-        { error: "Name and domain are required" },
-        { status: 400 }
-      )
+      return createErrorResponse(ERROR_MESSAGES.MISSING_FIELDS, 400)
     }
-    
-    // Validate domain format (basic validation)
-    const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$/
-    if (!domainRegex.test(domain)) {
-      return NextResponse.json(
-        { error: "Invalid domain format" },
-        { status: 400 }
-      )
+
+    // Domain validation
+    if (!validateDomain(domain)) {
+      return createErrorResponse(ERROR_MESSAGES.DOMAIN_INVALID, 400)
     }
-    
+
+    // Check if domain already exists for this user
+    const existingSite = await prisma.site.findFirst({
+      where: {
+        userId: session.user.id,
+        domain: sanitizeDomain(domain),
+      },
+    })
+
+    if (existingSite) {
+      return createErrorResponse(ERROR_MESSAGES.DOMAIN_EXISTS, 400)
+    }
+
     // Generate unique site ID
     const siteId = createId()
-    
-    // Create site in database
+
+    // Create site
     const site = await prisma.site.create({
       data: {
-        name,
-        domain,
-        siteId,
-        timezone: timezone || "UTC",
+        id: createId(),
         userId: session.user.id,
-      }
-    })
-    
-    return NextResponse.json(
-      { 
-        site,
-        message: "Site created successfully"
+        name,
+        domain: sanitizeDomain(domain),
+        siteId,
+        timezone,
+        updatedAt: new Date(),
       },
-      { status: 201 }
+    })
+
+    return createSuccessResponse(
+      {
+        success: true,
+        site,
+      },
+      201
     )
   } catch (error) {
-    console.error("Error creating site:", error)
-    return NextResponse.json(
-      { error: "Failed to create site" },
-      { status: 500 }
-    )
+    console.error("Create site error:", error)
+    return createErrorResponse(ERROR_MESSAGES.SERVER_ERROR, 500)
   }
 }
-
