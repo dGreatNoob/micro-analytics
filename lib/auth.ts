@@ -97,36 +97,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       try {
         // For OAuth providers, manually create/update user in database
         if (account?.provider === "google" || account?.provider === "github") {
-          const existingUser = await prisma.user.findUnique({
-            where: { email: user.email! }
+          // Use upsert for a single efficient database operation
+          const dbUser = await prisma.user.upsert({
+            where: { email: user.email! },
+            update: {
+              // Only update image and emailVerified on login
+              image: user.image,
+              emailVerified: new Date(),
+            },
+            create: {
+              email: user.email!,
+              name: user.name || user.email!.split('@')[0],
+              image: user.image,
+              emailVerified: new Date(),
+            }
           })
           
-          if (!existingUser) {
-            // Create new user
-            const newUser = await prisma.user.create({
-              data: {
-                email: user.email!,
-                name: user.name || user.email!.split('@')[0],
-                image: user.image,
-                emailVerified: new Date(),
-              }
-            })
-            
-            // Update user object with our database ID
-            user.id = newUser.id
-          } else {
-            // Update existing user's info
-            await prisma.user.update({
-              where: { email: user.email! },
-              data: {
-                name: user.name || existingUser.name,
-                image: user.image || existingUser.image,
-                emailVerified: new Date(),
-              }
-            })
-            
-            user.id = existingUser.id
-          }
+          // Update user object with our database ID
+          user.id = dbUser.id
         }
         
         return true
