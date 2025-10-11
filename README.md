@@ -31,7 +31,7 @@ Beautiful, simple, privacy-first analytics for your websites. No cookies, no tra
 - 🔧 Added password field & proper hashing
 - 🔧 All sign-in methods working perfectly
 
-📖 See [AUTH-FIX-JWT-SESSIONS.md](./AUTH-FIX-JWT-SESSIONS.md) for complete details.
+📖 See [AUTH-FIX-JWT-SESSIONS.md](./docs/troubleshoots/AUTH-FIX-JWT-SESSIONS.md) for complete details.
 
 ---
 
