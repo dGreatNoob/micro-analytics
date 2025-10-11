@@ -60,12 +60,12 @@ export function Header() {
 
           {/* Desktop CTA Buttons */}
           <div className="hidden sm:flex items-center gap-3 lg:gap-4">
-            <Link href="/login">
+            <Link href="/auth/signin">
               <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
                 Sign in
               </Button>
             </Link>
-            <Link href="/signup">
+            <Link href="/auth/signin">
               <Button
                 size="sm"
                 className="bg-gradient-to-r from-blue-500 to-violet-600 text-white hover:from-blue-600 hover:to-violet-700 glow-hover"
@@ -112,12 +112,12 @@ export function Header() {
                 </Link>
               </nav>
               <div className="flex flex-col space-y-3 pt-4 border-t border-white/10">
-                <Link href="/login">
+                <Link href="/auth/signin">
                   <Button variant="ghost" className="w-full text-white hover:bg-white/10 justify-start">
                     Sign in
                   </Button>
                 </Link>
-                <Link href="/signup">
+                <Link href="/auth/signin">
                   <Button className="w-full bg-gradient-to-r from-blue-500 to-violet-600 text-white hover:from-blue-600 hover:to-violet-700">
                     Start Free Trial
                   </Button>

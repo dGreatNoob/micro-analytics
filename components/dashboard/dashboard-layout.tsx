@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import type { Session } from "next-auth"
 
 import { useState } from "react"
 import Link from "next/link"
@@ -19,7 +20,13 @@ const navigation = [
   { name: "Devices", href: "/dashboard/devices", icon: Monitor },
 ]
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+export function DashboardLayout({ 
+  children, 
+  session 
+}: { 
+  children: React.ReactNode
+  session: Session
+}) {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -53,7 +60,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <Button variant="ghost" size="icon" onClick={toggleTheme} className="rounded-lg">
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            <UserDropdown />
+            <UserDropdown session={session} />
           </div>
         </div>
       </header>

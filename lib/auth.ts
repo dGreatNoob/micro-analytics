@@ -1,60 +1,50 @@
-/**
- * Authentication utilities for Microlytics
- * 
- * This is a simple client-side auth helper for demo purposes.
- * In production, replace with NextAuth.js, Supabase Auth, Clerk, or similar.
- */
+import NextAuth from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import Google from "next-auth/providers/google"
+import GitHub from "next-auth/providers/github"
+import { prisma } from "@/lib/prisma"
 
-// Check if user is authenticated (client-side only)
-export function isAuthenticated(): boolean {
-  if (typeof window === 'undefined') return false
-  return document.cookie.includes('auth-token=')
-}
-
-// Login helper (demo implementation)
-export function login(token: string) {
-  if (typeof window === 'undefined') return
-  document.cookie = `auth-token=${token}; path=/; max-age=2592000` // 30 days
-}
-
-// Logout helper
-export function logout() {
-  if (typeof window === 'undefined') return
-  document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
-  window.location.href = '/'
-}
-
-// Get auth token
-export function getAuthToken(): string | null {
-  if (typeof window === 'undefined') return null
-  const matches = document.cookie.match(/auth-token=([^;]+)/)
-  return matches ? matches[1] : null
-}
-
-// Mock user data (replace with real API call)
-export interface User {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-}
-
-export async function getCurrentUser(): Promise<User | null> {
-  const token = getAuthToken()
-  if (!token) return null
-  
-  // TODO: Replace with actual API call
-  // const response = await fetch('/api/user/me', {
-  //   headers: { Authorization: `Bearer ${token}` }
-  // })
-  // return response.json()
-  
-  // Mock user for demo
-  return {
-    id: '1',
-    name: 'Demo User',
-    email: 'demo@microlytics.com',
-    avatar: undefined,
-  }
-}
-
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    }),
+  ],
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error",
+  },
+  callbacks: {
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id
+      }
+      return session
+    },
+    async signIn({ user, account, profile, isNewUser }) {
+      // Send welcome email to new users
+      if (isNewUser && user.email) {
+        try {
+          const { sendWelcomeEmail } = await import('@/lib/email')
+          await sendWelcomeEmail(user.email, user.name)
+        } catch (error) {
+          console.error('Failed to send welcome email:', error)
+          // Don't block sign-in if email fails
+        }
+      }
+      return true
+    },
+  },
+  session: {
+    strategy: "database",
+  },
+  debug: process.env.NODE_ENV === "development",
+})
