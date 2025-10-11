@@ -12,12 +12,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // Removed allowDangerousEmailAccountLinking - security risk
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      // Removed allowDangerousEmailAccountLinking - security risk
+      authorization: {
+        params: {
+          scope: "read:user user:email", // Request only necessary permissions
+        },
+      },
     }),
     Credentials({
       name: "credentials",
