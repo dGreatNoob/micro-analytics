@@ -11,6 +11,35 @@ import {
   type PageviewData,
 } from "@/lib/tracking-utils"
 
+// Site cache (reduces database queries for frequently tracked sites)
+// Cache expires after 5 minutes
+const siteCache = new Map<string, { site: any, expiresAt: number }>()
+
+function getCachedSite(siteId: string) {
+  const cached = siteCache.get(siteId)
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.site
+  }
+  return null
+}
+
+function cacheSite(siteId: string, site: any) {
+  siteCache.set(siteId, {
+    site,
+    expiresAt: Date.now() + 300000 // 5 minutes
+  })
+}
+
+// Cleanup expired cache entries periodically
+setInterval(() => {
+  const now = Date.now()
+  for (const [key, value] of siteCache.entries()) {
+    if (value.expiresAt < now) {
+      siteCache.delete(key)
+    }
+  }
+}, 60000) // Every minute
+
 /**
  * POST /api/track - Track pageview or event
  * 
@@ -26,8 +55,8 @@ export async function POST(request: NextRequest) {
     // Step 1: Extract IP for rate limiting
     const clientIP = extractIP(request)
     
-    // Step 2: Check rate limit (100 requests per minute per IP)
-    const rateLimit = checkRateLimit(clientIP, 100, 60000)
+    // Step 2: Check rate limit (1000 requests per 10 seconds = 100 req/sec average)
+    const rateLimit = checkRateLimit(clientIP, 1000, 10000)
     
     if (!rateLimit.allowed) {
       console.warn(`[Tracking] Rate limit exceeded for IP: ${maskIP(clientIP)}`)
@@ -61,18 +90,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Step 5: Validate siteId exists in database
-    const site = await prisma.site.findUnique({
-      where: { siteId: data.siteId },
-      select: { id: true, siteId: true, name: true, domain: true }
-    })
-
+    // Step 5: Validate siteId exists in database (with caching for performance)
+    let site = getCachedSite(data.siteId)
+    
     if (!site) {
-      console.warn(`[Tracking] Invalid site ID: ${data.siteId}`)
-      return NextResponse.json(
-        { success: false, error: "Invalid site ID" },
-        { status: 404 }
-      )
+      // Cache miss - query database
+      site = await prisma.site.findUnique({
+        where: { siteId: data.siteId },
+        select: { id: true, siteId: true, name: true, domain: true }
+      })
+      
+      if (!site) {
+        console.warn(`[Tracking] Invalid site ID: ${data.siteId}`)
+        return NextResponse.json(
+          { success: false, error: "Invalid site ID" },
+          { status: 404 }
+        )
+      }
+      
+      // Cache the site for future requests
+      cacheSite(data.siteId, site)
     }
 
     // Step 6: Parse User-Agent
@@ -82,23 +119,28 @@ export async function POST(request: NextRequest) {
     const maskedIP = maskIP(clientIP)
     const geoLocation = getCountryFromIP(clientIP)
 
-    // Step 8: Store pageview in database
-    const pageview = await prisma.pageview.create({
-      data: {
-        id: generatePageviewId(),
-        siteId: site.id,
-        pathname: data.pathname,
-        referrer: data.referrer || null,
-        visitorId: data.visitorId,
-        device: parsedUA.device,
-        browser: parsedUA.browser,
-        os: parsedUA.os,
-        country: geoLocation.countryCode,
-        timestamp: new Date(data.timestamp),
-      }
+    // Step 8: Prepare pageview data
+    const pageviewId = generatePageviewId()
+    const pageviewData = {
+      id: pageviewId,
+      siteId: site.id,
+      pathname: data.pathname,
+      referrer: data.referrer || null,
+      visitorId: data.visitorId,
+      device: parsedUA.device,
+      browser: parsedUA.browser,
+      os: parsedUA.os,
+      country: geoLocation.countryCode,
+      timestamp: new Date(data.timestamp),
+    }
+
+    // Step 9: Store in database (async - don't wait)
+    // This significantly improves response time under high load
+    prisma.pageview.create({ data: pageviewData }).catch(error => {
+      console.error('[Tracking] Database error:', error)
     })
 
-    // Step 9: Log successful tracking (dev mode)
+    // Step 10: Log successful tracking (dev mode)
     if (process.env.NODE_ENV === "development") {
       const readableTime = new Date(data.timestamp).toLocaleString('en-US', {
         month: 'short',
@@ -121,13 +163,13 @@ export async function POST(request: NextRequest) {
       console.log('🌍 Country:    ', geoLocation.country || '(unknown)')
       console.log('📍 IP:         ', maskedIP, '(masked)')
       console.log('🕐 Time:       ', readableTime)
-      console.log('🔢 DB ID:      ', pageview.id)
+      console.log('🔢 DB ID:      ', pageviewId)
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
     }
 
-    // Step 10: Return success
+    // Step 11: Return success (immediately, database write is async)
     return NextResponse.json(
-      { success: true, id: pageview.id },
+      { success: true, id: pageviewId },
       { 
         status: 200,
         headers: {

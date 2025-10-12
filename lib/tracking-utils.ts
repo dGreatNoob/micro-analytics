@@ -155,8 +155,8 @@ export interface RateLimitResult {
 
 export function checkRateLimit(
   identifier: string,
-  limit: number = 100, // 100 requests
-  windowMs: number = 60000 // per 60 seconds (1 minute)
+  limit: number = 1000, // 1000 requests (increased from 100)
+  windowMs: number = 10000 // per 10 seconds (100 req/sec average)
 ): RateLimitResult {
   const now = Date.now()
   const entry = rateLimitStore.get(identifier)
