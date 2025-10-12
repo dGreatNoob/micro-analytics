@@ -195,10 +195,14 @@ This ensures an end-to-end working loop before expanding features.
 **Core Features:**
 * Time series charts (daily/weekly/monthly pageview trends)
 * Real-time data updates (polling or WebSocket)
+* **Custom events tracking** (`window.microlytics.track()` API) ⭐
+* **SPA navigation detection** (auto-track route changes) ⭐
 * Advanced filtering (by device, browser, country)
+* **Geographic analytics** (country-level breakdown) ⭐
 * Custom date range picker (select any start/end date)
-* Export functionality (CSV, PDF reports)
+* **Export functionality (CSV)** ⭐
 * Comparison mode (compare time periods)
+* **Site verification** (check if script is installed) ⭐
 
 **Dashboard Enhancements:**
 - [ ] Replace placeholder charts with real time-series data
@@ -208,6 +212,45 @@ This ensures an end-to-end working loop before expanding features.
 - [ ] Create export to CSV functionality
 - [ ] Add period comparison (vs previous period)
 - [ ] Show growth indicators on all metrics
+
+**New Features from Old Roadmap:**
+
+#### 7.A Custom Events Tracking
+- [ ] Extend `m.js` with `window.microlytics.track(name, properties)` API
+- [ ] Create `POST /api/track/event` endpoint for storing custom events
+- [ ] Create `GET /api/analytics/events` endpoint for querying events
+- [ ] Add `/dashboard/events` page to display custom events
+- [ ] Document custom events API for end-users
+- [ ] Test with real conversion tracking (signup, purchase, etc.)
+
+#### 7.B SPA Navigation Detection
+- [ ] Add History API listener to `m.js` (pushState/replaceState)
+- [ ] Detect route changes in Single Page Applications
+- [ ] Test with React Router, Vue Router, Next.js App Router
+- [ ] Update documentation for SPA users
+- [ ] Add configuration option to enable/disable SPA tracking
+
+#### 7.C Geographic Analytics
+- [ ] Implement real IP geolocation (MaxMind GeoLite2 or Vercel Edge)
+- [ ] Replace placeholder `getCountryFromIP()` function
+- [ ] Create `GET /api/analytics/countries` endpoint
+- [ ] Add `/dashboard/countries` page with country breakdown
+- [ ] Display top countries with visitor counts
+- [ ] Add map visualization (optional, using Chart.js or D3)
+
+#### 7.D Site Verification System
+- [ ] Check if site has received pageviews in last 24 hours
+- [ ] Show verification badge on site list
+- [ ] Add "Test Installation" button to site details
+- [ ] Display troubleshooting tips if not verified
+- [ ] Add real-time verification check (poll for first pageview)
+
+#### 7.E Data Export (CSV)
+- [ ] Create `GET /api/analytics/export` endpoint
+- [ ] Generate CSV from pages/referrers/devices data
+- [ ] Add download buttons to all analytics pages
+- [ ] Support date range selection for exports
+- [ ] Include column headers and formatting
 
 **Automated Testing Suite:**
 
@@ -294,10 +337,32 @@ Create `docs/phases/phase-7/PHASE-7-TESTING.md` with:
 - [ ] All error states display properly (already working ✅)
 - [ ] All loading states display properly (already working ✅)
 
+**New Features from Old Roadmap:**
+
+#### 8.A Onboarding Wizard
+- [ ] Create first-time user onboarding modal/flow
+- [ ] Step 1: Create your first site
+- [ ] Step 2: Copy tracking script with instructions
+- [ ] Step 3: Verify installation (check for pageviews)
+- [ ] Step 4: Celebrate first pageview with animation 🎉
+- [ ] Add progress indicator (Step X of 4)
+- [ ] Add "Skip for now" option for power users
+- [ ] Show onboarding checklist in dashboard header
+- [ ] Mark steps as complete automatically
+
+#### 8.B Public Shareable Dashboards (Optional)
+- [ ] Add `isPublic` and `publicToken` fields to Site model
+- [ ] Migration: `npx prisma migrate dev --name add-public-sharing`
+- [ ] Create `/public/[token]` route for public dashboards
+- [ ] Build read-only public dashboard view
+- [ ] Add toggle in site settings to make dashboard public
+- [ ] Generate unique public URLs
+- [ ] Add "Copy public link" button
+- [ ] Customize what metrics are publicly visible
+
 **Polish & Deployment:**
 - [ ] Add Sentry error tracking
 - [ ] Add error boundaries to React components
-- [ ] Create onboarding checklist in dashboard
 - [ ] Update landing page with dashboard screenshots
 - [ ] Write comprehensive installation guide
 - [ ] Deploy to Vercel production
@@ -325,12 +390,120 @@ Create `docs/phases/phase-7/PHASE-7-TESTING.md` with:
 - [ ] Demo video recorded
 - [ ] Launch announcement draft ready
 
-### Post-MVP (Deferred to Phase 9+)
+### Post-MVP (Phase 9+) - Revenue & Growth
 
-* Stripe billing and subscription tiers
-* Weekly reports and login notifications
-* Public shareable dashboards
-* Advanced custom event tracking
+**Features Deferred Until After Launch:**
+
+#### 9.A Billing & Subscriptions (Stripe)
+**Priority:** HIGH (for revenue)  
+**Estimated:** 1-2 weeks
+
+**Subscription Tiers:**
+- **Free:** 5K pageviews/month, 1 site
+- **Pro:** 100K pageviews/month, 10 sites, $9/mo
+- **Business:** 500K+ pageviews, unlimited sites, $29/mo
+
+**Tasks:**
+- [ ] Integrate Stripe SDK
+- [ ] Create pricing plans in Stripe Dashboard
+- [ ] Build checkout flow (/pricing → /checkout → success)
+- [ ] Add subscription management page
+- [ ] Implement usage tracking (count monthly pageviews)
+- [ ] Add upgrade prompts when limits reached
+- [ ] Create customer portal (manage subscription, invoices)
+- [ ] Handle Stripe webhooks (subscription events)
+- [ ] Add billing history page
+- [ ] Test payment flows end-to-end
+
+**Schema Changes:**
+```prisma
+model User {
+  // ... existing fields
+  stripeCustomerId    String?
+  stripeSubscriptionId String?
+  plan                String @default("free")
+  pla nLimits         Json?  // { pageviews: 5000, sites: 1 }
+}
+```
+
+---
+
+#### 9.B Advanced Email Notifications
+**Priority:** MEDIUM (for engagement)  
+**Estimated:** 1 week
+
+**Email Types:**
+- **Login Notifications:** Alert on new device/location
+- **Security Alerts:** Suspicious activity warnings
+- **Weekly Reports:** Analytics summary email
+- **Billing Emails:** Payment confirmations, failures
+- **Onboarding Sequence:** Day 1, 3, 7, 14, 30 tips
+- **Feature Announcements:** New features released
+
+**Tasks:**
+- [ ] Track login history (device, location, IP, timestamp)
+- [ ] Implement login notification emails
+- [ ] Create security alert system (detect unusual patterns)
+- [ ] Build weekly report generator (cron job)
+- [ ] Create email preferences page (/settings/notifications)
+- [ ] Implement unsubscribe functionality
+- [ ] Set up email analytics tracking (open rates, clicks)
+- [ ] Create 5-email onboarding sequence
+- [ ] Schedule cron jobs for weekly reports
+
+**Email Templates:**
+```typescript
+- loginNotification(user, device, location, ip)
+- securityAlert(user, reason, action)
+- weeklyReport(user, analytics, period)
+- billingConfirmation(user, amount, plan)
+- onboardingTip(user, tipNumber, content)
+```
+
+---
+
+#### 9.C Team Collaboration Features
+**Priority:** LOW (for scaling)  
+**Estimated:** 2 weeks
+
+**Features:**
+- Site transfer ownership
+- Multi-user access (invite team members)
+- Role-based permissions (owner, admin, viewer)
+- Team dashboard (all team sites in one view)
+- Activity log (who changed what)
+
+**Schema Changes:**
+```prisma
+model SiteUser {
+  id        String   @id @default(cuid())
+  siteId    String
+  userId    String
+  role      String   // owner, admin, viewer
+  createdAt DateTime @default(now())
+  
+  site      Site     @relation(fields: [siteId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@unique([siteId, userId])
+}
+```
+
+---
+
+#### 9.D Advanced Analytics
+**Priority:** MEDIUM  
+**Estimated:** 2-3 weeks
+
+**Features:**
+- Funnel analysis (track conversion paths)
+- Retention cohorts (user retention over time)
+- Session replay (record user sessions)
+- Heatmaps (click/scroll heatmaps)
+- A/B testing support
+- Goal tracking (conversion goals)
+
+**Value:** Competitive with enterprise analytics platforms
 
 ---
 
