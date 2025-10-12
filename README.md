@@ -13,25 +13,27 @@ Beautiful, simple, privacy-first analytics for your websites. No cookies, no tra
 
 ## ✅ Current Status
 
-**Progress:** Phase 2.1 Complete (33%) - Authentication Fully Working! 🎉
+**Progress:** Phase 6 In Progress (68%) - Analytics APIs Ready! 🚀
 
 - ✅ **Landing Page** - Smooth animations & modern UI
 - ✅ **Database** - PostgreSQL + Prisma + Docker
 - ✅ **Authentication** - Google, GitHub & Email/Password (JWT sessions)
-- ✅ **Password Auth** - Bcrypt hashing + verification
-- ✅ **Session Management** - JWT-based, 30-day expiry
-- ✅ **Welcome Emails** - Resend integration
-- ✅ **Dashboard** - Protected routes with auto-redirect
-- ⏳ **Tracking Script** - Coming next (Phase 3)
-- ⏸️ **Analytics** - Not yet implemented
+- ✅ **Welcome Emails** - Resend integration with HTML templates
+- ✅ **Tracking Script** - Lightweight, privacy-first (m.js)
+- ✅ **Data Ingestion API** - High-performance, stress-tested to 100 req/s
+- ✅ **Site Management** - CRUD APIs for user sites
+- ✅ **Analytics APIs** - Overview, Pages, Referrers, Devices endpoints
+- ⏳ **Dashboard UI** - API integration in progress (Phase 6)
+- ⏸️ **Billing & Subscriptions** - Planned for Phase 7
 
-### Recent Fixes (Oct 11, 2025)
-- 🔧 Fixed "stuck at signin" bug
-- 🔧 Switched to JWT sessions (works with all auth methods)
-- 🔧 Added password field & proper hashing
-- 🔧 All sign-in methods working perfectly
+### Recent Achievements (Oct 12, 2025)
+- ✅ Phase 5 Complete: Data Ingestion API (10,922 pageviews tracked!)
+- ✅ Performance optimized: 40ms avg response time, <100ms P95
+- ✅ Site caching & async writes for scalability
+- ✅ Phase 6 APIs: 4 analytics endpoints created & tested
+- 🎯 Next: Connect dashboard UI to show real analytics data
 
-📖 See [AUTH-FIX-JWT-SESSIONS.md](./docs/troubleshoots/AUTH-FIX-JWT-SESSIONS.md) for complete details.
+📖 See [PROGRESS-SUMMARY.md](./docs/planning/PROGRESS-SUMMARY.md) for complete timeline.
 
 ---
 
@@ -76,13 +78,18 @@ Visit http://localhost:3000 🎉
 - [`docs/EMAIL-QUICK-START.md`](docs/EMAIL-QUICK-START.md) - Email setup (5 min)
 
 **Development:**
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) - Master development plan
-- [`docs/PROGRESS-SUMMARY.md`](docs/PROGRESS-SUMMARY.md) - Current status (33%)
-- [`docs/EMAIL-NOTIFICATIONS.md`](docs/EMAIL-NOTIFICATIONS.md) - Email system
+- [`docs/planning/ROADMAP_V2.md`](docs/planning/ROADMAP_V2.md) - Master development plan
+- [`docs/planning/PROGRESS-SUMMARY.md`](docs/planning/PROGRESS-SUMMARY.md) - Current status (68%)
+- [`docs/deployment/EMAIL-NOTIFICATIONS.md`](docs/deployment/EMAIL-NOTIFICATIONS.md) - Email system
 
-**Authentication (Important):**
-- [`AUTH-FIX-JWT-SESSIONS.md`](./AUTH-FIX-JWT-SESSIONS.md) - Auth troubleshooting
-- [`SIGNIN-FIXES-SUMMARY.md`](./SIGNIN-FIXES-SUMMARY.md) - Implementation details
+**Phase Documentation:**
+- [`docs/phases/phase-5/PHASE-5-COMPLETE.md`](docs/phases/phase-5/PHASE-5-COMPLETE.md) - Data Ingestion
+- [`docs/phases/phase-5/STRESS-TEST-RESULTS.md`](docs/phases/phase-5/STRESS-TEST-RESULTS.md) - Performance tests
+- [`docs/phases/phase-5/FINAL-ASSESSMENT.md`](docs/phases/phase-5/FINAL-ASSESSMENT.md) - Phase 5 verdict
+
+**Testing:**
+- [`public/test/index.html`](public/test/index.html) - Live tracking test page
+- [`public/test/TEST-FILES-README.md`](public/test/TEST-FILES-README.md) - Testing guide
 
 ---
 
@@ -165,29 +172,36 @@ See `.env.example` for complete list.
 ## 🎯 Features
 
 ### ✅ Implemented
-- Modern landing page with animations
-- User authentication (Google, GitHub)
-- Welcome email notifications
-- Protected dashboard
-- Database with test data
-- Docker development environment
+- **Landing Page:** Modern UI with animations & section navigation
+- **Authentication:** Google, GitHub, Email/Password (JWT sessions)
+- **Welcome Emails:** Resend integration with HTML templates
+- **Tracking Script:** Lightweight m.js (privacy-first, no cookies)
+- **Data Ingestion:** High-performance `/api/track` endpoint
+- **Site Management:** Full CRUD APIs for managing sites
+- **Analytics APIs:** Overview, Pages, Referrers, Devices endpoints
+- **Database:** PostgreSQL + Prisma with optimized indexes
+- **Docker Environment:** One-command setup with `make dev`
 
 ### 🚧 In Development
-- Analytics tracking script
-- Event ingestion API
-- Real-time dashboard
-- Site management
-- Subscription billing
+- **Dashboard UI Integration** - Connecting pages to analytics APIs
+- **Real-time Data Display** - Charts & visualizations
+- **Time Range Filtering** - 7/30/90 day views
+
+### 📅 Planned
+- **Subscription Billing** - Stripe integration (Phase 7)
+- **Team Management** - Multi-user access (Phase 8)
+- **Custom Events** - Track specific user actions (Phase 9)
 
 ---
 
 ## 📊 Project Stats
 
-- **63** TypeScript/TSX files
-- **25** React components  
-- **13** Documentation guides
-- **7** Database tables
-- **100+** Sample analytics records
+- **80+** TypeScript/TSX files
+- **30+** React components  
+- **20+** Documentation guides
+- **7** Database tables (User, Site, Pageview, Event, etc.)
+- **10,922** Real pageviews tracked & stored
+- **100 req/s** API performance (stress-tested)
 
 ---
 
@@ -213,7 +227,8 @@ Proprietary - All rights reserved
 **Ready to code?**
 - Start dev server: `make dev`
 - View database: `npx prisma studio`
-- Read next phase: [`docs/ROADMAP.md`](docs/ROADMAP.md) → Phase 3
+- Test tracking: Open http://localhost:3000/test/index.html
+- Read roadmap: [`docs/planning/ROADMAP_V2.md`](docs/planning/ROADMAP_V2.md)
 
 ---
 
