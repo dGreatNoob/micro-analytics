@@ -2,18 +2,24 @@
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
 
-const ranges = [
-  { label: "7d", value: "7d" },
-  { label: "30d", value: "30d" },
-  { label: "90d", value: "90d" },
-  { label: "12m", value: "12m" },
+export type TimeRange = "7d" | "30d" | "90d";
+
+const ranges: { label: string; value: TimeRange }[] = [
+  { label: "7 Days", value: "7d" },
+  { label: "30 Days", value: "30d" },
+  { label: "90 Days", value: "90d" },
 ]
 
-export function TimeRangeSelector() {
-  const [selected, setSelected] = useState("7d")
+interface TimeRangeSelectorProps {
+  value?: TimeRange;
+  onChange?: (range: TimeRange) => void;
+}
 
+export function TimeRangeSelector({ 
+  value = "7d", 
+  onChange 
+}: TimeRangeSelectorProps) {
   return (
     <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
       {ranges.map((range) => (
@@ -21,10 +27,10 @@ export function TimeRangeSelector() {
           key={range.value}
           variant="ghost"
           size="sm"
-          onClick={() => setSelected(range.value)}
+          onClick={() => onChange?.(range.value)}
           className={cn(
             "rounded-md px-3 h-8 text-sm font-medium transition-colors",
-            selected === range.value
+            value === range.value
               ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground",
           )}

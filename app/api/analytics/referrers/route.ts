@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     // Verify site ownership
     const site = await prisma.site.findFirst({
       where: {
-        siteId: siteId,
+        id: siteId,
         userId: session.user.id
       }
     })

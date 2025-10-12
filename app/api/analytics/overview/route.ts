@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     // Verify site ownership
     const site = await prisma.site.findFirst({
       where: {
-        siteId: siteId,
+        id: siteId,
         userId: session.user.id
       }
     })
@@ -49,11 +49,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Parse date range
+    // Parse date range from timeRange parameter
+    const timeRange = searchParams.get("timeRange") || "7d"
+    const days = timeRange === "30d" ? 30 : timeRange === "90d" ? 90 : 7
+    
     const dateRange = parseDateRangeFromQuery(
       searchParams.get("start"),
       searchParams.get("end"),
-      7 // Default to last 7 days
+      days
     )
 
     // Get current period pageviews
@@ -126,23 +129,69 @@ export async function GET(request: NextRequest) {
     const pageviewGrowth = calculateGrowth(totalPageviews, previousTotalPageviews)
     const visitorGrowth = calculateGrowth(uniqueVisitors, previousUniqueVisitors)
 
-    // Return overview data
-    return NextResponse.json({
-      success: true,
-      data: {
-        totalPageviews,
-        uniqueVisitors,
-        avgTimeOnPage, // in seconds
-        bounceRate, // percentage
-        growth: {
-          pageviews: pageviewGrowth,
-          visitors: visitorGrowth
-        },
-        dateRange: {
-          start: dateRange.start.toISOString(),
-          end: dateRange.end.toISOString()
-        }
+    // Get top pages
+    const pageGroups = new Map<string, { views: number; visitors: Set<string> }>()
+    currentPageviews.forEach(pv => {
+      if (!pageGroups.has(pv.pathname)) {
+        pageGroups.set(pv.pathname, { views: 0, visitors: new Set() })
       }
+      const group = pageGroups.get(pv.pathname)!
+      group.views++
+      group.visitors.add(pv.visitorId)
+    })
+
+    const topPages = Array.from(pageGroups.entries())
+      .map(([pathname, data]) => ({
+        pathname,
+        views: data.views,
+        uniqueVisitors: data.visitors.size
+      }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 10)
+
+    // Get top referrers
+    const referrerData = await prisma.pageview.findMany({
+      where: {
+        siteId: site.id,
+        timestamp: {
+          gte: dateRange.start,
+          lte: dateRange.end
+        }
+      },
+      select: {
+        referrer: true,
+        visitorId: true
+      }
+    })
+
+    const referrerGroups = new Map<string, { visitors: Set<string>; pageviews: number }>()
+    referrerData.forEach(pv => {
+      const ref = pv.referrer || "(direct)"
+      if (!referrerGroups.has(ref)) {
+        referrerGroups.set(ref, { visitors: new Set(), pageviews: 0 })
+      }
+      const group = referrerGroups.get(ref)!
+      group.visitors.add(pv.visitorId)
+      group.pageviews++
+    })
+
+    const topReferrers = Array.from(referrerGroups.entries())
+      .map(([referrer, data]) => ({
+        referrer,
+        visitors: data.visitors.size,
+        pageviews: data.pageviews
+      }))
+      .sort((a, b) => b.visitors - a.visitors)
+      .slice(0, 10)
+
+    // Return overview data (flat structure expected by frontend)
+    return NextResponse.json({
+      totalPageviews,
+      uniqueVisitors,
+      avgSessionDuration: avgTimeOnPage, // Frontend expects this name
+      bounceRate,
+      topPages,
+      topReferrers
     })
   } catch (error) {
     console.error("[Analytics] Overview error:", error)
