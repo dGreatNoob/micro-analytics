@@ -137,15 +137,10 @@ export default function SiteDetailsPage() {
   }
 
   const trackingScript = site ? `<!-- Microlytics Tracking Script -->
-<script>
-  (function() {
-    var script = document.createElement('script');
-    script.src = '${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/m.js';
-    script.setAttribute('data-site', '${site.siteId}');
-    script.async = true;
-    document.head.appendChild(script);
-  })();
-</script>` : ""
+<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/m.js" data-site="${site.siteId}"></script>` : ""
+
+  const trackingScriptProd = site ? `<!-- Microlytics Tracking Script (Minified) -->
+<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/m.min.js" data-site="${site.siteId}"></script>` : ""
 
   if (isLoading) {
     return (
@@ -215,27 +210,54 @@ export default function SiteDetailsPage() {
             Copy and paste this code into the <code className="px-1 py-0.5 bg-muted rounded text-xs">&lt;head&gt;</code> section of your website
           </p>
           
-          <div className="relative">
-            <pre className="p-4 bg-muted rounded-lg text-xs overflow-x-auto">
-              <code>{trackingScript}</code>
-            </pre>
-            <Button
-              onClick={() => copyToClipboard(trackingScript)}
-              className="absolute top-2 right-2"
-              size="sm"
-              variant="secondary"
-            >
-              <Copy className="h-3 w-3 mr-2" />
-              Copy
-            </Button>
+          {/* Development Script */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs font-medium text-muted-foreground">Development (Unminified)</Label>
+            </div>
+            <div className="relative">
+              <pre className="p-4 bg-muted rounded-lg text-xs overflow-x-auto">
+                <code>{trackingScript}</code>
+              </pre>
+              <Button
+                onClick={() => copyToClipboard(trackingScript)}
+                className="absolute top-2 right-2"
+                size="sm"
+                variant="secondary"
+              >
+                <Copy className="h-3 w-3 mr-2" />
+                Copy
+              </Button>
+            </div>
           </div>
 
-          <div className="flex items-start gap-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-500 text-sm">
-            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          {/* Production Script */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs font-medium text-muted-foreground">Production (Minified)</Label>
+            </div>
+            <div className="relative">
+              <pre className="p-4 bg-muted rounded-lg text-xs overflow-x-auto">
+                <code>{trackingScriptProd}</code>
+              </pre>
+              <Button
+                onClick={() => copyToClipboard(trackingScriptProd)}
+                className="absolute top-2 right-2"
+                size="sm"
+                variant="secondary"
+              >
+                <Copy className="h-3 w-3 mr-2" />
+                Copy
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-green-500 text-sm">
+            <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-medium">Script not active yet</p>
-              <p className="text-xs mt-1 text-blue-400">
-                The tracking script (m.js) will be built in Phase 4. For now, you can prepare your site for installation.
+              <p className="font-medium">Tracking script is now active! 🎉</p>
+              <p className="text-xs mt-1 text-green-600">
+                Phase 4 complete! The script will track pageviews. Full analytics dashboard coming in Phase 6.
               </p>
             </div>
           </div>

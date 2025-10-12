@@ -28,8 +28,20 @@ export function createSuccessResponse<T>(data: T, status: number = 200) {
 
 /**
  * Validate domain format
+ * Allows standard domains (example.com) and localhost for testing
  */
 export function validateDomain(domain: string): boolean {
+  // Allow localhost for testing
+  if (domain.toLowerCase() === 'localhost') {
+    return true
+  }
+  
+  // Allow localhost with port
+  if (domain.toLowerCase().startsWith('localhost:')) {
+    return true
+  }
+  
+  // Standard domain validation
   const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/
   return domainRegex.test(domain)
 }

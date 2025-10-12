@@ -182,10 +182,33 @@ export default function SitesPage() {
                   id="domain"
                   value={formData.domain}
                   onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                  placeholder="example.com"
+                  placeholder="example.com or localhost"
                   required
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Use &quot;localhost&quot; for testing
+                </p>
               </div>
+            </div>
+            <div>
+              <Label htmlFor="timezone">Timezone</Label>
+              <select
+                id="timezone"
+                value={formData.timezone}
+                onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
+                className="w-full px-3 py-2 bg-background border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="UTC">UTC</option>
+                <option value="America/New_York">Eastern Time (ET)</option>
+                <option value="America/Chicago">Central Time (CT)</option>
+                <option value="America/Denver">Mountain Time (MT)</option>
+                <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                <option value="Europe/London">London (GMT)</option>
+                <option value="Europe/Paris">Paris (CET)</option>
+                <option value="Asia/Tokyo">Tokyo (JST)</option>
+                <option value="Asia/Shanghai">Shanghai (CST)</option>
+                <option value="Australia/Sydney">Sydney (AEST)</option>
+              </select>
             </div>
             <div className="flex gap-2">
               <Button type="submit" disabled={isCreating}>
