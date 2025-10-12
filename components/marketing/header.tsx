@@ -31,7 +31,7 @@ export function Header() {
                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
                 <Image 
-                  src="/app_icon.png" 
+                  src="/images/app_icon.png" 
                   alt="Microlytics Logo" 
                   width={32} 
                   height={32} 

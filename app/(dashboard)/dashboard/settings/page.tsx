@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Copy } from "lucide-react"
 
 export default function SettingsPage() {
-  const trackingScript = `<script async defer src="https://microlytics.app/m.js" data-site="SITE_ID"></script>`
+  const trackingScript = `<script async defer src="https://microlytics.app/scripts/m.js" data-site="SITE_ID"></script>`
 
   return (
       <div className="space-y-6 max-w-4xl">

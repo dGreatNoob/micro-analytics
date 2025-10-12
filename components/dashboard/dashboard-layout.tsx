@@ -54,7 +54,7 @@ export function DashboardLayout({
             </Button>
             <Link href="/dashboard" className="flex items-center gap-2">
               <Image 
-                src="/app_icon.png" 
+                src="/images/app_icon.png" 
                 alt="Microlytics Logo" 
                 width={28} 
                 height={28} 

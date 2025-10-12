@@ -68,8 +68,8 @@ export function extractIP(request: NextRequest): string {
     return cfConnectingIP.trim()
   }
   
-  // Fallback to request IP (might be undefined in dev)
-  return request.ip || "127.0.0.1"
+  // Fallback to localhost (request.ip might not be available)
+  return "127.0.0.1"
 }
 
 /**

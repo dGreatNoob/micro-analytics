@@ -1,7 +1,7 @@
 # Microlytics Test Page
 
-**Location:** `/public/index.html`  
-**URL:** `http://localhost:3000/` or `http://192.168.0.42:3000/`
+**Location:** `/public/test/index.html`  
+**URL:** `http://localhost:3000/test/` or `http://192.168.0.42:3000/test/`
 
 ---
 
@@ -25,7 +25,7 @@ We now have **ONE** comprehensive test page that handles:
 
 **Open:**
 ```
-http://localhost:3000/
+http://localhost:3000/test/
 ```
 
 **You should see:**
@@ -58,7 +58,7 @@ npm run dev -- --hostname 0.0.0.0
 
 **On your phone, open:**
 ```
-http://192.168.0.42:3000/
+http://192.168.0.42:3000/test/
 ```
 (Replace 192.168.0.42 with your laptop's IP)
 
@@ -94,7 +94,7 @@ http://192.168.0.42:3000/
 ## ✅ Verification Checklist
 
 ### Desktop Testing
-- [ ] Open `http://localhost:3000/`
+- [ ] Open `http://localhost:3000/test/`
 - [ ] Page loads successfully
 - [ ] Terminal shows tracking log
 - [ ] Log says "Stored in Database"
@@ -106,7 +106,7 @@ http://192.168.0.42:3000/
 
 ### Mobile Testing
 - [ ] Start dev server: `npm run dev -- --hostname 0.0.0.0`
-- [ ] Open on phone: `http://192.168.0.42:3000/`
+- [ ] Open on phone: `http://192.168.0.42:3000/test/`
 - [ ] Terminal shows tracking log
 - [ ] Device detected as "Mobile" or "Tablet"
 - [ ] Browser shows mobile variant (Safari Mobile, etc.)
@@ -172,7 +172,7 @@ http://192.168.0.42:3000/
 **Tracking Script:**
 ```html
 <script async defer 
-  src="/m.js" 
+  src="/scripts/m.js" 
   data-site="iam2ttdx8jgnvfpg5aikziun">
 </script>
 ```
@@ -199,12 +199,12 @@ http://192.168.0.42:3000/
 ## 📱 Network URLs
 
 **From your laptop:**
-- Test page: `http://localhost:3000/`
+- Test page: `http://localhost:3000/test/`
 - Dashboard: `http://localhost:3000/dashboard/sites`
 - Prisma Studio: `http://localhost:5557`
 
 **From other devices (same WiFi):**
-- Test page: `http://192.168.0.42:3000/`
+- Test page: `http://192.168.0.42:3000/test/`
 - Dashboard: `http://192.168.0.42:3000/dashboard/sites`
 
 ---

@@ -27,7 +27,7 @@ export function HowItWorks() {
   const [isTyping, setIsTyping] = useState(false)
   
   // Full script text for typewriter effect
-  const fullScriptText = `<script async defer src="https://microlytics.app/m.js"\ndata-site="YOUR_SITE_ID"></script>`
+  const fullScriptText = `<script async defer src="https://microlytics.app/scripts/m.js"\ndata-site="YOUR_SITE_ID"></script>`
   const [typedText, setTypedText] = useState("")
   const [showCursor, setShowCursor] = useState(false)
   
@@ -196,7 +196,7 @@ export function HowItWorks() {
                             <span className="text-blue-400">{"<script "}</span>
                             <span className="text-violet-400">async defer</span>
                             <span className="text-blue-400">{" src="}</span>
-                            <span className="text-green-400">&ldquo;https://microlytics.app/m.js&rdquo;</span>
+                            <span className="text-green-400">&ldquo;https://microlytics.app/scripts/m.js&rdquo;</span>
                             <br />
                             <span className="text-blue-400">data-site=</span>
                             <span className="text-green-400">&ldquo;YOUR_SITE_ID&rdquo;</span>

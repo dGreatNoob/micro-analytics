@@ -11,19 +11,19 @@ const testimonials = [
     quote: "Simple, fast, and respects my users' privacy. Exactly what I needed.",
     author: "Alex Chen",
     role: "Indie Developer",
-    avatar: "/developer-working.png",
+    avatar: "/images/developer-working.png",
   },
   {
     quote: "Replaced Google Analytics in one click. The dashboard is beautiful and loads instantly.",
     author: "Sarah Martinez",
     role: "SaaS Founder",
-    avatar: "/visionary-leader.png",
+    avatar: "/images/visionary-leader.png",
   },
   {
     quote: "Finally, analytics that don't slow down my site. The API is a game-changer.",
     author: "James Wilson",
     role: "Content Creator",
-    avatar: "/the-creator.png",
+    avatar: "/images/the-creator.png",
   },
 ]
 

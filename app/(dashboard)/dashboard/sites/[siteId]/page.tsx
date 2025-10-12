@@ -137,10 +137,10 @@ export default function SiteDetailsPage() {
   }
 
   const trackingScript = site ? `<!-- Microlytics Tracking Script -->
-<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/m.js" data-site="${site.siteId}"></script>` : ""
+<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/scripts/m.js" data-site="${site.siteId}"></script>` : ""
 
   const trackingScriptProd = site ? `<!-- Microlytics Tracking Script (Minified) -->
-<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/m.min.js" data-site="${site.siteId}"></script>` : ""
+<script async defer src="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/scripts/m.min.js" data-site="${site.siteId}"></script>` : ""
 
   if (isLoading) {
     return (

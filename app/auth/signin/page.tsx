@@ -163,7 +163,7 @@ export default function AuthPage() {
           {/* Logo */}
           <div className="flex justify-center items-center gap-3 mb-2">
             <Image 
-              src="/app.png" 
+              src="/images/app.png" 
               alt="Microlytics Logo" 
               width={48} 
               height={48} 

@@ -11,7 +11,7 @@ export function Footer() {
               <div className="col-span-2 md:col-span-1">
                 <div className="flex items-center gap-2 mb-3">
                   <Image 
-                    src="/app.png" 
+                    src="/images/app.png" 
                     alt="Microlytics Logo" 
                     width={20} 
                     height={20} 

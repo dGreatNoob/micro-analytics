@@ -107,12 +107,12 @@ export default function SitesPage() {
   }
 
   const copyTrackingScript = (site: Site) => {
-    const script = `<script async defer src="${window.location.origin}/m.js" data-site="${site.siteId}"></script>`
+    const script = `<script async defer src="${window.location.origin}/scripts/m.js" data-site="${site.siteId}"></script>`
     navigator.clipboard.writeText(script)
   }
 
   const getTrackingScript = (site: Site) => {
-    return `<script async defer src="${window.location.origin}/m.js" data-site="${site.siteId}"></script>`
+    return `<script async defer src="${window.location.origin}/scripts/m.js" data-site="${site.siteId}"></script>`
   }
 
   if (isLoading) {
