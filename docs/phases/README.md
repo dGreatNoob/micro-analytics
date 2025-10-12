@@ -10,11 +10,15 @@ phases/
 │   ├── PHASE-3-COMPLETE.md
 │   └── TEST-PHASE-3.md
 │
-└── phase-4/           # Tracking Script
-    ├── PHASE-4-COMPLETE.md      # Full implementation summary
-    ├── PHASE-4-QUICKSTART.md    # 5-minute quick start
-    ├── TEST-PHASE-4.md          # Comprehensive testing guide
-    └── SOLO-TEST-GUIDE.md       # Solo developer testing guide
+├── phase-4/           # Tracking Script
+│   ├── PHASE-4-COMPLETE.md      # Full implementation summary
+│   ├── PHASE-4-QUICKSTART.md    # 5-minute quick start
+│   ├── TEST-PHASE-4.md          # Comprehensive testing guide
+│   └── SOLO-TEST-GUIDE.md       # Solo developer testing guide
+│
+└── phase-5/           # Data Ingestion API
+    ├── PHASE-5-COMPLETE.md      # Full implementation summary
+    └── TEST-PHASE-5.md          # Testing guide
 ```
 
 ## Quick Links
@@ -27,7 +31,8 @@ phases/
   - ✅ Phase 2.5: Welcome Emails
   - ✅ Phase 3: Site Management
   - ✅ Phase 4: Tracking Script
-  - 🔜 Phase 5: Data Ingestion API (Next)
+  - ✅ Phase 5: Data Ingestion API
+  - 🔜 Phase 6: Dashboard Data Layer (Next)
 
 ## Usage
 
