@@ -143,9 +143,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       else if (new URL(url).origin === baseUrl) {
         return url
       }
-      // For signout or other callbacks, go to home
-      // For signin, go to dashboard
-      return baseUrl
+      // Default: redirect to dashboard after successful OAuth login
+      return `${baseUrl}/dashboard`
     },
   },
   session: {

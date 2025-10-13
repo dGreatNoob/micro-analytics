@@ -6,7 +6,7 @@ help:
 	@echo "🚀 Microlytics Development Commands"
 	@echo ""
 	@echo "Database:"
-	@echo "  make db-up       - Start PostgreSQL & Redis containers"
+	@echo "  make db-up       - Start PostgreSQL container"
 	@echo "  make db-down     - Stop containers"
 	@echo "  make db-reset    - Reset database (drop & recreate)"
 	@echo "  make db-migrate  - Run Prisma migrations"
@@ -27,12 +27,14 @@ help:
 
 # Start database containers
 db-up:
-	@echo "🐳 Starting PostgreSQL & Redis..."
-	docker-compose up -d postgres redis
+	@echo "🐳 Starting PostgreSQL..."
+	docker-compose up -d postgres
 	@echo "⏳ Waiting for PostgreSQL to be ready..."
 	@sleep 3
 	@docker-compose exec -T postgres pg_isready -U microlytics -d microlytics_dev
 	@echo "✅ Database is ready!"
+	@echo ""
+	@echo "💡 Note: Redis/Valkey not needed for MVP (system Valkey already running on :6379)"
 	@echo "📊 Adminer UI: http://localhost:8080"
 	@echo "   Server: postgres"
 	@echo "   User: microlytics"
