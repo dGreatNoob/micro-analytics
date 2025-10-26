@@ -1,4 +1,6 @@
-# My startup Saas idea born from a long series of homesickness, boredome and the strong desire to be rich lmao
+# My startup Saas idea born from a long series of homesickness, boredome and the strong desire to be rich lmao. 
+
+# this project's been on hold for 2 weeks bc of work deadlines. will get back to this soon!
 
 **Privacy-First Website Analytics Platform**
 

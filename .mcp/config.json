@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/biiieem/repos/micro-analytics"],
+      "env": {}
+    },
+    "sequential-thinking": {
+      "command": "npx", 
+      "args": ["@modelcontextprotocol/server-sequential-thinking"],
+      "env": {}
+    },
+    "enhanced-postgres": {
+      "command": "npx",
+      "args": ["enhanced-postgres-mcp-server"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "postgresql://postgres:password@localhost:5432/microlytics"
+      }
+    }
+  }
+}
